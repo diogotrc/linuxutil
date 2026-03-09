@@ -4,9 +4,10 @@ All notable changes to LGL System Loadout are documented here.
 
 ---
 
-## [Unreleased] — 2026-03-09
+## [1.0.0] — 2026-03-09
 
 ### Added
+- **pkexec / polkit support** — the app now ships with a `.desktop` file and a polkit policy (`lgl-system-loadout.policy`). When launched from the app launcher, the system authentication dialog prompts for a password once and the wizard runs fully elevated from there. No need to launch from a terminal with `sudo`.
 - **System Update page** — new page 2, before all selection pages. Runs `dnf upgrade --refresh` with a live scrolling log output. Skipping is optional but warned against. On completion, detects whether a new kernel was installed and presents a **Reboot Now** button (with confirmation) or **Continue Anyway**.
 - **LibreWolf** added to Browsers page as a Flatpak option (`io.gitlab.librewolf-community`), under a new "Privacy-focused" section.
 
