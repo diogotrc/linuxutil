@@ -12,15 +12,6 @@ Pick your loadout. Hit install. Your system is ready.
 
 </div>
 
----
-
-## What's new in 1.0.3
-
-### Fixed
-- **Discover / app store listing** — desktop file renamed to reverse-DNS format (`com.linuxgamerlife.lgl-system-loadout.desktop`) so AppStream validation passes and the app appears correctly in Discover.
-
----
-
 ## Installation
 
 ### Recommended — COPR (Fedora 43)
