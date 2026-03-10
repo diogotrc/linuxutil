@@ -18,10 +18,10 @@ Pick your loadout. Hit install. Your system is ready.
 
 LGL System Loadout is a graphical wizard that gets a fresh Fedora install ready in minutes. Choose exactly what you want from a curated list of packages across gaming, multimedia, content creation, development tools, browsers, communication apps, GPU drivers, virtualisation, KDE theming, and the CachyOS kernel.
 
-- No defaults -  nothing is pre-selected
+- No defaults — nothing is pre-selected
 - Every item shows its current installed state before you commit
 - All checks run concurrently so pages load instantly
-- Installs only - nothing is removed without your knowledge
+- Installs only — nothing is removed without your knowledge
 
 ---
 
@@ -42,7 +42,7 @@ LGL System Loadout is a graphical wizard that gets a fresh Fedora install ready 
 ### 1. Install build dependencies
 
 ```bash
-sudo dnf install cmake gcc-c++ qt6-qtbase-devel qt6-qtbase-concurrent
+sudo dnf install cmake gcc-c++ qt6-qtbase-devel
 ```
 
 ### 2. Extract and enter the project folder
@@ -70,6 +70,11 @@ chmod +x lgl-system-loadout
 sudo ./lgl-system-loadout
 ```
 
+> **Note — Qt version compatibility:** Always build the binary on the same machine you intend to run it on, or on a machine with the same Qt6 version. A binary built against Qt 6.10 will not run on a system with an older Qt6 installed (`version 'Qt_6.10' not found`). If you see this error, either build from source on the target machine or update Qt6 first:
+> ```bash
+> sudo dnf upgrade qt6-qtbase
+> ```
+
 ---
 
 ## What's included
@@ -89,7 +94,7 @@ sudo ./lgl-system-loadout
 | **Browsers** | Firefox, Chromium, Chrome, Brave, Vivaldi, LibreWolf |
 | **Communication** | Thunderbird, Discord, Vesktop, Spotify |
 | **KDE Theming** | KZones, Panel Colorizer |
-| **CachyOS Kernel** | kernel-cachyos, scx-scheds, scx-manager, scx-tools | Secureboot will need to be disabled or you will get an error on boot
+| **CachyOS Kernel** | kernel-cachyos, scx-scheds, scx-manager, scx-tools |
 
 ---
 
