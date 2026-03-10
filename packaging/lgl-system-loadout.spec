@@ -5,7 +5,7 @@ Summary:        Guided setup wizard for Fedora — gaming, content creation, and
 
 License:        MIT
 URL:            https://github.com/linuxgamerlife/fedora-gui-installer
-Source0:        https://github.com/linuxgamerlife/fedora-gui-installer/releases/download/v%{version}/lgl-system-loadout-%{version}.zip
+Source0:        https://github.com/linuxgamerlife/lgl-system-loadout/releases/download/v%{version}/lgl-system-loadout-%{version}.zip
 
 BuildRequires:  cmake >= 3.16
 BuildRequires:  gcc-c++
