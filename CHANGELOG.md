@@ -8,7 +8,8 @@ All notable changes to LGL System Loadout are documented here.
 
 Special thanks to **Mojibake.d** for being the first to identify and report bugs in 1.0.0 🙌
 
-> ![Mojibake.d](https://yt3.ggpht.com/8KwpCLVUhfsZmY5RyhI4e0vq1qk7hNaNcwRL1WmLjjsHUEMV2L5W_RpDOVgkR8YOZzVl0j-s43k=s88-c-k-c0x00ffffff-no-rj) **Mojibake.d** — thank you for testing the first release, catching these issues, and taking the time to report them. You made 1.0.1 happen.
+> ![Mojibake.d](https://yt3.ggpht.com/8KwpCLVUhfsZmY5RyhI4e0vq1qk7hNaNcwRL1WmLjjsHUEMV2L5W_RpDOVgkR8YOZzVl0j-s43k=s88-c-k-c0x00ffffff-no-rj)
+> **Mojibake.d** — thank you for testing the first release, catching these issues, and taking the time to report them. You made 1.0.1 happen.
 
 ### Fixed
 - **Panel Colorizer download failing** — the download path used `QTemporaryDir` whose generated path contained spaces (e.g. `/tmp/LGL System Loadout-XXXXX/`). The spaces broke the bash variable expansion inside the shell step, causing `ls: cannot access '/tmp/LGL'` and a failed download. Fixed by using a fixed, space-free path `/tmp/lgl-panel-colorizer.plasmoid`.
