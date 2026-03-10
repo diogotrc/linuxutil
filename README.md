@@ -1,6 +1,6 @@
 <div align="center">
 
-# LGL System Loadout v1.0.3
+# LGL System Loadout
 
 **A curated Fedora setup wizard for gaming, content creation, and development.**  
 Pick your loadout. Hit install. Your system is ready.
@@ -11,6 +11,31 @@ Pick your loadout. Hit install. Your system is ready.
 [![KDE Plasma](https://img.shields.io/badge/KDE-Plasma-1d99f3?logo=kde&logoColor=white)](https://kde.org)
 
 </div>
+
+---
+
+## Overview
+
+LGL System Loadout is a graphical wizard that gets a fresh Fedora install ready in minutes. Choose exactly what you want from a curated list of packages across gaming, multimedia, content creation, development tools, browsers, communication apps, GPU drivers, virtualisation, KDE theming, and the CachyOS kernel.
+
+- No defaults — nothing is pre-selected
+- Every item shows its current installed state before you commit
+- All checks run concurrently so pages load instantly
+- Installs only — nothing is removed without your knowledge
+
+---
+
+## Requirements
+
+| | |
+|---|---|
+| **OS** | Fedora 43+ (developed and tested on Fedora 43) |
+| **Desktop** | KDE Plasma (some items are KDE-specific) |
+| **Connection** | Internet required |
+
+> The wizard includes a guided system update step on page 2. It is recommended to let it run before making any selections.
+
+---
 
 ## Installation
 
