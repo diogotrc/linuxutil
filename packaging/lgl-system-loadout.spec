@@ -1,5 +1,5 @@
 Name:           lgl-system-loadout
-Version:        1.0.3
+Version:        1.0.4
 Release:        1%{?dist}
 Summary:        Guided setup wizard for Fedora — gaming, content creation, and development
 
@@ -34,7 +34,7 @@ Features:
   - Single polkit password prompt via pkexec
 
 %prep
-%setup -q -n lgl-system-loadout-1.0.3
+%setup -q -n lgl-system-loadout-1.0.4
 
 %build
 mkdir -p build
@@ -72,8 +72,8 @@ install -Dm644 packaging/lgl-system-loadout-256.png \
     %{buildroot}%{_datadir}/pixmaps/lgl-system-loadout.png
 
 # AppStream metainfo (Discover uses this for version display and app info)
-install -Dm644 packaging/lgl-system-loadout.metainfo.xml \
-    %{buildroot}%{_datadir}/metainfo/lgl-system-loadout.metainfo.xml
+install -Dm644 packaging/com.linuxgamerlife.lgl-system-loadout.metainfo.xml \
+    %{buildroot}%{_datadir}/metainfo/com.linuxgamerlife.lgl-system-loadout.metainfo.xml
 
 
 %post
@@ -102,7 +102,7 @@ fi
 %license LICENSE
 %{_bindir}/lgl-system-loadout
 %{_datadir}/applications/com.linuxgamerlife.lgl-system-loadout.desktop
-%{_datadir}/metainfo/lgl-system-loadout.metainfo.xml
+%{_datadir}/metainfo/com.linuxgamerlife.lgl-system-loadout.metainfo.xml
 %{_datadir}/polkit-1/actions/com.linuxgamerlife.lgl-system-loadout.policy
 %{_datadir}/icons/hicolor/256x256/apps/lgl-system-loadout.png
 %{_datadir}/icons/hicolor/128x128/apps/lgl-system-loadout.png
@@ -111,6 +111,9 @@ fi
 %{_datadir}/pixmaps/lgl-system-loadout.png
 
 %changelog
+* Tue Mar 10 2026 LinuxGamerLife <contact@linuxgamerlife.com> - 1.0.4-1
+- Metainfo file renamed to reverse-DNS format to match component ID and desktop file
+
 * Tue Mar 10 2026 LinuxGamerLife <contact@linuxgamerlife.com> - 1.0.3-1
 - Desktop file renamed to reverse-DNS format (com.linuxgamerlife.lgl-system-loadout.desktop)
 - AppStream metadata now passes validation; app appears correctly in Discover
