@@ -18,10 +18,11 @@ Pick your loadout. Hit install. Your system is ready.
 
 LGL System Loadout is a graphical wizard that gets a fresh Fedora install ready in minutes. Choose exactly what you want from a curated list of packages across gaming, multimedia, content creation, development tools, browsers, communication apps, GPU drivers, virtualisation, KDE theming, and the CachyOS kernel.
 
-- No defaults — nothing is pre-selected
+- No terminal needed if you grab the RPM version in releases
+- No defaults - nothing is pre-selected
 - Every item shows its current installed state before you commit
 - All checks run concurrently so pages load instantly
-- Installs only — nothing is removed without your knowledge
+- Installs only - nothing is removed without your knowledge
 
 ---
 
@@ -40,7 +41,7 @@ LGL System Loadout is a graphical wizard that gets a fresh Fedora install ready 
 ## Installation
 
 ### No terminal
-Download the RPM below and run it. It will open in Discover. Once installed, there will be a new icon in Utilities
+Download the RPM in releases and run it. It will open in Discover, click install at the top and enter your password. Once installed, there will be a new icon in Utilities
 
 ### Recommended — COPR (Fedora 43)
 
