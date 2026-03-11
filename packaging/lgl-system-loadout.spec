@@ -34,7 +34,7 @@ Features:
   - Single polkit password prompt via pkexec
 
 %prep
-%setup -q -n lgl-system-loadout-1.0.4
+%setup -q -n lgl-system-loadout-%{version}
 
 %build
 mkdir -p build
