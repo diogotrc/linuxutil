@@ -43,47 +43,10 @@ Rapidora is an incredibly sophisticated graphical installer (Fork) that gets a f
 ### No terminal
 Download the RPM in releases and run it. It will open in Discover, click install at the top and enter your password. Once installed, there will be a new icon in Utilities
 
-### Recommended — COPR (Fedora 43)
 
-```bash
-sudo dnf copr enable linuxgamerlife/rapidora
-sudo dnf install rapidora
-```
 
 After installation the app appears in your KDE launcher under **Utilities** as **Rapidora**. Launch it and a single password prompt will appear — the wizard then runs fully elevated.
 
-## Building from source
-
-### 1. Install build dependencies
-
-```bash
-sudo dnf install cmake gcc-c++ qt6-qtbase-devel
-```
-
-### 2. Extract and enter the project folder
-
-```bash
-mkdir -p ~/projects
-mv ~/Downloads/rapidora.zip ~/projects/
-cd ~/projects
-unzip rapidora.zip
-cd lgl-gui-installer
-```
-
-### 3. Build
-
-```bash
-mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make -j$(nproc)
-```
-
-### 4. Run app
-
-```bash
-chmod +x rapidora
-sudo ./rapidora
-```
 
 > **Note — Qt version compatibility:** Always build the binary on the same machine you intend to run it on, or on a machine with the same Qt6 version. A binary built against Qt 6.10 will not run on a system with an older Qt6 installed (`version 'Qt_6.10' not found`). If you see this error, either build from source on the target machine or update Qt6 first:
 > ```bash
