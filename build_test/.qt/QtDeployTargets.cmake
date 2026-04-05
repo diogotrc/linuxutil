@@ -1,0 +1,4 @@
+set(__QT_DEPLOY_TARGET_rapidora_FILE /home/diogo/Documentos/Oppy Config/linuxutil/build_test/rapidora)
+set(__QT_DEPLOY_TARGET_rapidora_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_tst_installworker_FILE /home/diogo/Documentos/Oppy Config/linuxutil/build_test/tst_installworker)
+set(__QT_DEPLOY_TARGET_tst_installworker_TYPE EXECUTABLE)

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+
+  <id>com.linuxgamerlife.rapidora</id>
+
+  <name>Rapidora</name>
+  <summary>Guided setup wizard for Fedora gaming, content creation, and development</summary>
+
+  <metadata_license>MIT</metadata_license>
+  <project_license>MIT</project_license>
+
+  <description>
+    <p>
+      Rapidora is a graphical wizard that gets a fresh Fedora install ready in minutes.
+      Choose exactly what you want from a curated list of packages across gaming, multimedia,
+      content creation, development tools, browsers, communication apps, GPU drivers,
+      virtualisation, KDE theming, and the CachyOS kernel.
+    </p>
+    <p>Features:</p>
+    <ul>
+      <li>No defaults — nothing is pre-selected</li>
+      <li>Every item shows its current installed state before you commit</li>
+      <li>All checks run concurrently so pages load instantly</li>
+      <li>Installs only — nothing is removed without your knowledge</li>
+      <li>Single polkit password prompt via pkexec</li>
+    </ul>
+    <p>What you can install:</p>
+    <ul>
+      <li>Gaming — Steam, Lutris, Wine, Heroic, MangoHud, vkBasalt, ProtonUp-Qt, and more</li>
+      <li>Content Creation — OBS Studio, Kdenlive, GIMP, Inkscape, Audacity, Blender</li>
+      <li>GPU Drivers — AMD Mesa, Vulkan, VA-API</li>
+      <li>Browsers — Firefox, Chromium, Chrome, Brave, Vivaldi, LibreWolf</li>
+      <li>Communication — Thunderbird, Discord, Vesktop, Spotify</li>
+      <li>Virtualisation — virt-manager, libvirt</li>
+      <li>KDE Theming — KZones, Panel Colorizer</li>
+      <li>CachyOS Kernel — performance-optimised kernel with BORE scheduler</li>
+      <li>System Tools — btop, fastfetch, distrobox, timeshift, and more</li>
+      <li>Multimedia — ffmpeg, GStreamer plugins, VLC</li>
+    </ul>
+  </description>
+
+  <launchable type="desktop-id">com.linuxgamerlife.rapidora.desktop</launchable>
+
+  <url type="homepage">https://github.com/linuxgamerlife/rapidora</url>
+  <url type="bugtracker">https://github.com/linuxgamerlife/rapidora/issues</url>
+
+  <developer id="com.linuxgamerlife">
+    <name>LinuxGamerLife</name>
+  </developer>
+
+  <categories>
+    <category>Utility</category>
+    <category>System</category>
+  </categories>
+
+  <keywords>
+    <keyword>fedora</keyword>
+    <keyword>setup</keyword>
+    <keyword>gaming</keyword>
+    <keyword>install</keyword>
+    <keyword>packages</keyword>
+    <keyword>steam</keyword>
+    <keyword>drivers</keyword>
+    <keyword>wizard</keyword>
+  </keywords>
+
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+
+  <releases>
+    <release version="1.0.6" date="2026-04-04">
+      <description>
+        <p>New official icon and bug fixes.</p>
+        <ul>
+          <li>Novo Ícone Oficial — Identidade visual definitiva integrada em todos os tamanhos (256px a 48px).</li>
+          <li>Crash de Idioma — Corrigida falha de segmentação ao selecionar o idioma Inglês no diálogo inicial.</li>
+          <li>Alinhamento na WelcomePage — Badges "Instalado" e "Não Instalado" agora possuem largura fixa de 110px, garantindo que o texto descritivo lateral fique perfeitamente alinhado verticalmente.</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.5" date="2026-04-04">
+      <description>
+        <p>Modern Qt6 wizard redesign.</p>
+        <ul>
+          <li>Redesigned Success Page with category badges and hero glow</li>
+          <li>New global styling system using style.qss</li>
+          <li>Smart reboot detection for kernel, GPU and virtualisation updates</li>
+          <li>Native Qt6 language selection integration</li>
+          <li>Cleaned up deprecated pages and stabilized selection page layout</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.4" date="2026-03-10">
+      <description>
+        <p>Packaging fix.</p>
+        <ul>
+          <li>Metainfo file renamed to reverse-DNS format to match component ID and desktop file</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.3" date="2026-03-10">
+      <description>
+        <p>Packaging fix.</p>
+        <ul>
+          <li>Desktop file renamed to reverse-DNS format to satisfy AppStream validation</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.2" date="2026-03-10">
+      <description>
+        <p>Packaging fix.</p>
+        <ul>
+          <li>Fixed AppStream metadata component ID so the app appears correctly in Discover</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.1" date="2026-03-10">
+      <description>
+        <p>Bug fix release.</p>
+        <ul>
+          <li>Fixed Panel Colorizer download failing due to spaces in temp directory path</li>
+          <li>Fixed Panel Colorizer log showing garbled binary text</li>
+          <li>Fixed KZones download failing due to same space-in-path issue</li>
+          <li>Fixed kernel warning box overlapping log output on System Update page</li>
+          <li>Clarified reboot confirmation dialog wording</li>
+          <li>Added Secure Boot warning on CachyOS Kernel page</li>
+        </ul>
+      </description>
+    </release>
+    <release version="1.0.0" date="2026-03-09">
+      <description>
+        <p>Initial release.</p>
+      </description>
+    </release>
+  </releases>
+
+  <content_rating type="oars-1.1" />
+
+</component>

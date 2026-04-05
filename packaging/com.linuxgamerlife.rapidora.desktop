@@ -1,0 +1,21 @@
+[Desktop Entry]
+Categories=Utility;System;
+Comment[en_GB]=Set up your Fedora system for gaming, content creation, and development
+Comment=Set up your Fedora system for gaming, content creation, and development
+Exec=pkexec /usr/bin/rapidora
+GenericName[en_GB]=Fedora Setup Wizard
+GenericName=Fedora Setup Wizard
+Icon=rapidora
+Keywords=fedora;setup;gaming;install;packages;steam;drivers;
+MimeType=
+Name[en_GB]=Rapidora
+Name=Rapidora
+Path=
+StartupNotify=true
+StartupWMClass=rapidora
+Terminal=false
+TerminalOptions=
+Type=Application
+Version=1.0
+X-KDE-SubstituteUID=false
+X-KDE-Username=

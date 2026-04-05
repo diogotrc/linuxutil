@@ -1,0 +1,237 @@
+  Reiniciar Agora
+ Atualizar Agora 
+ Pular 
+%1 etapa(s) encontraram erros. Verifique o log abaixo.
+(O console DNF emitirá a stream aqui assim que o passo iniciar...)
+(Sem detalhes disponíveis)
+<b style='color:#ff6b6b;'>Etapas com Erro</b>
+<b>Ajustes do Sistema</b>
+<b>Atenção:</b> Os repositórios do RPM Fusion parecem estar ausentes. Volte na Etapa de Repositórios e certifique-se de habilitá-los, ou essas instalações de Codecs irão falhar silenciosamente.
+<b>Auditoria de Armazenamento OK</b><br>Carga Baixada: ~%1 GB &nbsp;|&nbsp; Espaço Livre: %2 GB
+<b>Ferramentas do Sistema & Utilitários</b>
+<b>Paciência é uma virtude! ⏳</b>
+<b>Pacotes Nativos do Sistema (RPM)</b>
+<b>Tamanho Estimado do Pacote: ~%1 GB</b><br>Não foi possível aferir o espaço alocado no disco físico.
+<b>⚠️ Espaço Crítico Insuficiente</b><br>Requeridos: <b>~%1 GB</b> &nbsp;|&nbsp; Disponíveis: <b>%2 GB</b>
+<br><br><font color='#ff5555'><b>Ignorando Auditoria: Prosseguindo instalação de forma insegura.</b></font>
+<font color='#4cd14c'><b>[OK] Suporte de hardware VT-x/AMD-V habilitado na BIOS.</b></font><br>
+<font color='#ff5555'><b>[FALHA] A Virtualização está DESABILITADA na BIOS ou seu CPU não suporta!</b> As Máquinas Virtuais não poderão iniciar até você corrigir isto, mesmo que instale os pacotes.</font><br><br>
+<i>Itens não selecionados permanecerão inalterados pelo sistema.</i>
+<i>Nada selecionado além das ferramentas base.<br>Retorne e selecione itens para construir seu sistema.</i>
+<i>Negociando com servidores online... Baixando via <tt>dnf upgrade --refresh</tt>.</i>
+<i>Os seguintes softwares serão empacotados pela plataforma <b>Flatpak via Flathub</b> em caixas de areia blindadas. Nosso instalador conectará e criará as rotas de Flathub automaticamente por você caso não estejam configuradas no sistema.</i>
+<i>Validando ramificações de Kernel do Fedora antes do procedimento...</i>
+<span style='color:#3db03d;'>✓ Integrações validadas e Sistema Atualizado de ponta a ponta com sucesso.</span>
+<span style='color:#cc7700;'>⚠ Execução pulada pelo usuário. Prossiga sob sua própria responsabilidade.</span>
+A interface gráfica necessária para configurar a fonte, cor e posicionamento do MangoHud sem precisar encostar em arquivos de texto.
+Acelerador Gráfico NVIDIA detectado na barramento físico!
+Aceleração Gráfica
+Aceleração Gráfica e GPU
+Aguardando inicialização do despachante...
+Alternativa fluída do ProtonUp escrita puramente em Vala e GTK4, muito polida para quem prefere designs orgânicos.
+Aplicativos criativos base para vídeos, áudio, vetores e design tridimensional.
+Após todas as dezenas de instalações do Rapidora, faz um flush de gigabytes que não seriam mais usados.
+As operações automáticas foram delegadas aos Workers no background.
+Atualização de Base
+Atualização do Sistema
+Audacity
+BTop
+Bazaar Center
+Bem-vindo ao Rapidora
+Blender 3D (Flatpak)
+Brave Browser
+Camada de tradução de Windows vital para o linux. O Rapidora compilará Wine x64 e x32 automaticamente simultaneamente.
+Camadas vitais pesadas e não-livres, injetando suporte robusto retroativo a formatos MP3, leitura de DVDs e muito mais ao Totem e afins.
+Chrome com anabolizantes. Escudos fortes, bloqueio absoluto de anúncios, telemetrias e rastreadores desde o primeiro bip.
+Chromium Base
+Cliente de streaming musical e podcasts oficial da Spotify.
+Cliente open source focado exclusivamente no Epic Games, GOG e Amazon Prime de forma hiper otimizada.
+Codecs Nativos
+Comunicação & Produtividade
+Configuração Concluída
+Configuração de Inicialização
+Configurações Complementares
+Confirmação de Reinício
+Construa de uma nova maneira usando IA. Um ecossistema completo provido pelos repositórios globais da Google de forma nativa.
+Construindo o Sistema
+Controlador daemon vital que comanda os módulos do hypervisor. Habilitado automaticamente no boot.
+Controller Support
+Corrigir integração KDE Google
+Criação de Conteúdo
+Desabilitar NetworkManager-wait-online
+Desconhecida
+Descubra os astros e trace planetas em tempo real direto da sua máquina.
+Disponibiliza software de código aberto isento das restrições proprietárias mas não unificado no repositório Fedora oficial (Ex: codecs de vídeo ffmpeg, h264, h265, reprodutor nativo VLC Media).
+Distrobox
+Driver Proprietário (Código Fechado). Nosso sistema montará o kernel do Akmod-Nvidia utilizando as assinaturas do RPM Fusion NonFree de forma totalmente silenciosa e automática.
+Drivers AMD MESA
+Drivers NVIDIA
+Ecossistema Gaming
+Ecossistema pleno da Google. O Rapidora cuidará de injetar todas as chaves PGP seguras e criar o dnf.repo dinâmico no disco.
+Encontre complementos incriveis, módulos extras e extensores robustos.
+FFmpeg (Core swap)
+Fastfetch
+Fechar
+Ferramenta de estúdio de mesa multipista de rápido processamento para manipulação de áudio.
+Ferramenta veloz de informações de host de terminal.
+Ferramentas de Gaming
+Ferramentas de Sistema
+Ferramentas de chat, ambientes de construção em IA e suíte de edição.
+Ferramentas e Ajustes de Sistema
+Ferramentas nativas do kernel KVM/QEMU para execução de Máquinas Virtuais no nível do hardware.
+Finalizar >>
+Framework de IA (Fedora RPM)
+Framework e Flatpaks
+From Fedora Repos
+GIMP
+GOverlay
+GStreamer Bad-Free Extras
+GStreamer Ugly Plugins
+Game Launchers
+Google Antigravity
+Google Chrome
+Gráficos Intel Arc/Integrado detectados.
+Guia das Caixas de Seleção
+HTop
+Habilite grandes fontes de software de terceiros. O RPM Fusion é um pré-requisito estrito para multimídia avançada, jogos fluídos e pacotes fechados.
+Heroic Games Launcher (Flatpak)
+INSTALADO
+Identifique sua placa de vídeo principal. Isso garantirá os drivers corretos e aceleradores no kernel do Linux e RPM Fusion.
+Ignorar Risco e Continuar
+Informações do Sistema
+Iniciar Instalação
+Inkscape
+Instalado
+Instalação com Avisos
+Intel / Máquina Virtual
+Interface gráfica amigável de desktop para gerenciar redes virtuais e hospedar Máquinas Virtuais em KVM/QEMU.
+Kdenlive
+Kernel & Escaladores
+Kernel Modules Extra
+Lançador multifacetado de código aberto perfeito para jogos da GOG, EA, Amazon, emuladores variados e binários offline.
+LibreWolf (Flatpak)
+Libvirt API Daemon
+Limpeza de DNF Residual
+Log vazio.
+Lutris
+Maior loja digital do mundo, nativa com a maravilhosa integração do Valve Proton embutida para abrir games de Windows.
+MangoHud
+Manter os pacotes de base do Fedora atualizados é essencial antes de efetuarmos injeções profundas de novos programas.
+Mensageiro rápido nativizado para nuvem via API aberta Telegram.
+Monitor de recursos com uma bela UI colorida nos terminas de shell.
+Mozilla Firefox
+Multimídia & Codecs
+Navegador moderno de código aberto guiado à liberdade de dados. Ele já acompanha o Fedora Core por natureza.
+Navegadores
+Navegadores & Web
+Nenhum erro registrado.
+Nenhuma GPU dedicada detectada (Fallback / Intel).
+Nenhuma categoria selecionada.
+NÃO INSTALADO
+Não Instalado
+O MSI Afterburner do Linux. Permite travar quadros e injetar métricas completas e belíssimas de GPU/CPU nos seus jogos.
+O eterno e clássico editor de gráficos raster recheado de recursos para edição de fotos.
+O fluxo STDOUT dos contêineres e logs DNF será alimentado em tempo-real aqui.\nClique em uma Categoria à esquerda para auditar...
+OBS Studio
+OnlyOffice
+Otimiza tempo de boot em quase 20s desativando uma service ociosa.
+Overload: Falta %1 MB
+Padrão ouro da indústria para gravação de tela, composição de cenas e streaming ao vivo.
+Performance & Monitoring
+Placa de Vídeo / APU AMD detectada na barramento físico!
+Placas gráficas híbridas, APUs estritas Intel ou Máquinas Virtuais. O Mesa nativo padrão do Fedora será unicamente o suficiente.
+Plano de comissionamento de sistema gerado. Revise todas as automações alocadas abaixo e clique em iniciar.
+Plataforma profissional de manipulação de vetores SVG perfeitamente escaláveis.
+Plataformas, camadas de compatibilidade Windows, overlays de desempenho e suporte a controles.
+Player hiper robusto famoso por conter seus próprios codecs auto-suficientes, abrindo de tudo e um pouco mais sem dependências externas.
+Poderosa suíte corporativa, 100% compatível localmente com planilhas e docs Word XSLX.
+Poderoso editor de vídeo não-linear mantido livre sob o guarda-chuva do projeto KDE.
+Portais principais da Web. Navegadores de terceiros terão seus repositórios isolados adicionados automaticamente via dnf.
+Portal chave para pacotes comerciais/fechados vitais para certas rotinas do Linux Gamer, autorizando injeção limpa de ferramentas como o App Steam, Drivers proprietários da NVIDIA e componentes corporativos atrelados.
+Privacy-focused (Flatpak from Flathub)
+Procedendo e consolidando %1 pacote(s) ou comandos da categoria.
+Projetado para Power Users. Inúmeras funções densas de customização lateral e divisões de janelas baseadas em Chromium.
+Prosseguir de qualquer forma (Sob Próprio Risco)
+Proteção de sistema via Snapshots incríveis de estado completo via BTRFS.
+Proton & Compatibility Tools
+ProtonPlus (Flatpak)
+ProtonUp-Qt (Flatpak)
+Protontricks
+Próximo  →
+Rapidora
+Rapidora — Selecione o Idioma
+Recomendado caso o seu controle (ex: Xbox, DualShock) não seja detectado nativamente. Provém drivers faltantes ao Kernel base.
+Redes & Comunicação (Flatpaks Isolados)
+Refaz varredura DNF de instalação no cache local
+Reiniciar Imediatamente
+Repositórios RPM Fusion
+Repositórios de Software
+Repositórios do Sistema
+Script automatizado que injeta vcrun, directx ou media foundation dentro de garrafas de jogos específicos da Steam local.
+Se marcado, indica que será baixado e instalado em sua máquina.
+Se marcado, o pacote garante atualização/reinstalação.
+Seu sistema foi otimizado com sucesso.
+Spotify App
+Steam
+Stellarium Planetarium
+Sub-instale ArchLinux, Debian e outras distros no mesmo terminal.
+Sub-plugins adicionais de extensão base para leitura em matrizes de players nativos.
+Sub-virtualização
+Substitui o pacote ffmpeg-free castrado do Fedora pelo pacote original completo contendo todos os codificadores modernos H264 e H265 ativados.
+Substitui o provedor de accounts KDE por um script que restabelece com perfeição o login do Google Drive e YouTube nas contas online.
+Sumário Executivo
+Suporte a vídeo, áudio e codecs. O repositório RPM Fusion é estritamente exigido a seguir.
+Suíte Open Source Integrada diretamente e ativamente ao Kernel. Instala extensões RADV, Mesa-DRI e Vulkan em massa.
+Suíte líder de mercado, de código aberto para modelagem 3D, animação, rig de texturas e até simulação real-time.
+Telegram Desktop
+Third-Party (Repo added automatically)
+Timeshift
+Tudo pronto!
+Tudo pronto! Seu sistema Fedora foi otimizado com sucesso.
+Um grande fork do Firefox hiper-focado em privacidade absoluta em tempo real. Empacotado sob segurança sandbox do Flathub.
+Usuário: 
+Utilitário GUI essencial que instala a última versão experimental do Proton-GE, Luxtorpeda e Wine-GE com poucos cliques.
+Utilitário avançado de linha de comando usado para programar criação massificada de VMs de forma automatizada.
+Utilitários essenciais de manutenção e otimização da máquina.
+VLC Media Player
+Versão do Fedora: 
+Versão open source despida sem as telemetrias e bloqueios da Google. Nenhuma conta atrelada.
+Virt-Install
+Virt-Manager
+Virt-Viewer
+Virtualização (KVM/QEMU)
+Virtualização de Sistemas
+Visualizador de baixissima latência que injeta SPICE e VNC para exibição robusta remota da tela das máquinas virtuais.
+Visualizador simples interativo baseado em textos (clássico).
+Vivaldi
+Windows Compatibility
+Wine (Multilib)
+Wrapper otimizadíssimo de WhatsApp Web feito nativamente em C++ WebKit.
+ZapZap (WhatsApp)
+[Checando DNF...]
+[Checando...]
+[INSTALADO]
+[NÃO INSTALADO]
+[REINSTALAR]
+↻ Atualizar
+⏳ Interrogando o sistema anfitrião...
+⏳ Rastreador em andamento...
+⏳ Validando mirrors locais...
+⏳ Varrendo pacotes KVM Locais...
+⏳ Verificando integridade...
+★ RECOMENDADO MÁQUINA
+☐ Nenhum
+☑ Selecionar Todos
+☑ Todos
+⚠  %1 etapa(s) com erro
+⚠️ Construção Concluída: Detectados %1 erro(s). Reveja o Log.
+✔  0 erros encontrados — Instalação perfeita!
+🏁 Construção Concluída — Nenhuma advertência pendente.
+🐧 Sistema Alvo: Fedora %1   |   👤 Usuário: %2
+👁 Esconder Metadados (Modo Compacto)
+👁 Exibir Interações (Modo Completo)
+📋  Copiar Log Completo
+📋  Copiar Log de Erros
+🔍 Buscar pacotes (ex: Lutris, Proton)...
+🔎 Sondando PCI Local em busca de GPUs...
+🟢 Aterrisando: 

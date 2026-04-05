@@ -3,7 +3,6 @@
 #include "pages/updatepage.h"
 #include "pages/repospage.h"
 #include "pages/systemtoolspage.h"
-#include "pages/pythonpage.h"
 #include "pages/multimediapage.h"
 #include "pages/contentpage.h"
 #include "pages/gpupage.h"
@@ -11,8 +10,6 @@
 #include "pages/virtpage.h"
 #include "pages/browserspage.h"
 #include "pages/commspage.h"
-#include "pages/themingpage.h"
-#include "pages/cachyospage.h"
 #include "pages/reviewpage.h"
 #include "pages/installpage.h"
 #include "pages/donepage.h"
@@ -24,7 +21,7 @@ MainWizard::MainWizard(QWidget *parent) : QWizard(parent)
 {
     detectSystem();
 
-    setWindowTitle("LGL System Loadout");
+    setWindowTitle(tr("Rapidora"));
     setMinimumSize(960, 700);
     setWizardStyle(QWizard::ModernStyle);
     setOption(QWizard::NoBackButtonOnStartPage, true);
@@ -35,7 +32,6 @@ MainWizard::MainWizard(QWidget *parent) : QWizard(parent)
     setPage(PAGE_UPDATE,      new UpdatePage(this));
     setPage(PAGE_REPOS,       new ReposPage(this));
     setPage(PAGE_SYSTEMTOOLS, new SystemToolsPage(this));
-    setPage(PAGE_PYTHON,      new PythonPage(this));
     setPage(PAGE_MULTIMEDIA,  new MultimediaPage(this));
     setPage(PAGE_CONTENT,     new ContentPage(this));
     setPage(PAGE_GPU,         new GpuPage(this));
@@ -43,8 +39,6 @@ MainWizard::MainWizard(QWidget *parent) : QWizard(parent)
     setPage(PAGE_VIRT,        new VirtPage(this));
     setPage(PAGE_BROWSERS,    new BrowsersPage(this));
     setPage(PAGE_COMMS,       new CommsPage(this));
-    setPage(PAGE_THEMING,     new ThemingPage(this));
-    setPage(PAGE_CACHYOS,     new CachyOSPage(this));
     setPage(PAGE_REVIEW,      new ReviewPage(this));
     setPage(PAGE_INSTALL,     new InstallPage(this));
     setPage(PAGE_DONE,        new DonePage(this));
@@ -143,29 +137,62 @@ QList<InstallStep> MainWizard::buildSteps() const
     // ---- System Tools ----
     for (const auto &pkg : QStringList{
              "fastfetch","btop","htop",
-             "distrobox","xrdp","timeshift"}) {
+             "distrobox","timeshift"}) {
         if (get(QString("systools/%1").arg(pkg))) {
             S << dnfStep(QString("systool_%1").arg(pkg), pkg);
         }
     }
 
-    // ---- Python & CLI dev tools ----
-    if (get("python/pip")) {
-        S << dnfStep("pip", "python3-pip");
+    if (get("systools/fix_kde_google")) {
+        QString script = 
+            "#!/bin/bash\n"
+            "PROVIDER_FILE=\"/usr/share/accounts/providers/kde/google.provider\"\n"
+            "if [ -f \"$PROVIDER_FILE\" ]; then\n"
+            "  cp \"$PROVIDER_FILE\" \"${PROVIDER_FILE}.backup\"\n"
+            "fi\n"
+            "tee \"$PROVIDER_FILE\" >/dev/null <<'EOL'\n"
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+            "<provider id=\"google\">\n"
+            "  <name>Google</name>\n"
+            "  <description>GNOME-ID, Google Drive and YouTube</description>\n"
+            "  <icon>im-google</icon>\n"
+            "  <translations>kaccounts-providers</translations>\n"
+            "  <domains>.*google\\.com</domains>\n"
+            "  <template>\n"
+            "    <group name=\"auth\">\n"
+            "      <setting name=\"method\">oauth2</setting>\n"
+            "      <setting name=\"mechanism\">web_server</setting>\n"
+            "      <group name=\"oauth2\">\n"
+            "        <group name=\"web_server\">\n"
+            "          <setting name=\"Host\">accounts.google.com</setting>\n"
+            "          <setting name=\"AuthPath\">o/oauth2/auth?access_type=offline</setting>\n"
+            "          <setting name=\"TokenPath\">o/oauth2/token</setting>\n"
+            "          <setting name=\"RedirectUri\">http://localhost/oauth2callback</setting>\n"
+            "          <setting name=\"ResponseType\">code</setting>\n"
+            "          <setting type=\"as\" name=\"Scope\">[\n"
+            "            'https://www.googleapis.com/auth/userinfo.email',\n"
+            "            'https://www.googleapis.com/auth/userinfo.profile',\n"
+            "            'https://www.googleapis.com/auth/calendar',\n"
+            "            'https://www.googleapis.com/auth/tasks',\n"
+            "            'https://www.googleapis.com/auth/drive'\n"
+            "          ]</setting>\n"
+            "          <setting type=\"as\" name=\"AllowedSchemes\">['https']</setting>\n"
+            "          <setting name=\"ClientId\">44438659992-7kgjeitenc16ssihbtdjbgguch7ju55s.apps.googleusercontent.com</setting>\n"
+            "          <setting name=\"ClientSecret\">-gMLuQyDiI0XrQS_vx_mhuYF</setting>\n"
+            "          <setting type=\"b\" name=\"ForceClientAuthViaRequestBody\">true</setting>\n"
+            "        </group>\n"
+            "      </group>\n"
+            "    </group>\n"
+            "  </template>\n"
+            "</provider>\n"
+            "EOL\n"
+            "kquitapp6 kded6 || true\n";
+
+        S << InstallStep{"fix_kde_google", "Fix KDE Google Integration",
+            {"bash", "-c", script}};
     }
-    if (get("python/pipx")) {
-        S << dnfStep("pipx_pkg", "pipx");
-        S << InstallStep{"pipx_ensurepath", QString("pipx ensurepath for %1").arg(tu),
-            {"sudo", "-u", tu, "pipx", "ensurepath"}};
-    }
-    if (get("python/tldr")) {
-        S << InstallStep{"pipx_tldr", "Install tldr via pipx",
-            {"sudo", "-u", tu, "pipx", "install", "--include-deps", "tldr"}};
-    }
-    if (get("python/ytdlp")) {
-        S << InstallStep{"pipx_ytdlp", "Install yt-dlp via pipx",
-            {"sudo", "-u", tu, "pipx", "install", "--include-deps", "yt-dlp"}};
-    }
+
+
 
     // ---- Multimedia & Codecs ----
     if (get("media/ffmpeg")) {
@@ -203,25 +230,18 @@ QList<InstallStep> MainWizard::buildSteps() const
         S << dnfStep("audacity", "audacity");
     }
 
-    // ---- GPU Drivers (AMD) ----
+    // ---- GPU Drivers ----
     const QString gpuChoice = m_opts.value("gpu/choice", "none").toString();
     if (gpuChoice == "amd") {
-        const QList<QPair<QString,QString>> amdPkgs = {
-            {"mesa_dri",     "mesa-dri-drivers"},
-            {"mesa_vulkan",  "mesa-vulkan-drivers"},
-            {"vulkan_loader","vulkan-loader"},
-            {"mesa_va",      "mesa-va-drivers"},
-            {"linux_fw",     "linux-firmware"},
-        };
-        for (const auto &[key, pkg] : amdPkgs) {
-            if (get(QString("gpu/amd/%1").arg(key))) {
-                S << InstallStep{
-                    QString("amd_%1").arg(key),
-                    QString("Install %1").arg(pkg),
-                    {"dnf", "-y", "install", pkg}
-                };
-            }
-        }
+        S << InstallStep{"amd_mesa", "Install core AMD Mesa & Vulkan drivers",
+            {"dnf", "-y", "install", 
+             "mesa-dri-drivers", "mesa-vulkan-drivers", "vulkan-loader", "mesa-va-drivers"}};
+        // linux-firmware is usually already installed, but keeping logic flat
+    }
+    else if (gpuChoice == "nvidia") {
+        S << InstallStep{"nvidia_akmod", "Install NVIDIA proprietary drivers (RPM Fusion)",
+            {"dnf", "-y", "install", 
+             "akmod-nvidia", "xorg-x11-drv-nvidia-cuda"}};
     }
 
     // ---- Gaming ----
@@ -229,8 +249,9 @@ QList<InstallStep> MainWizard::buildSteps() const
     bool needFlatpak = get("gaming/heroic") || get("gaming/protonup") ||
                        get("gaming/protonplus") || get("gaming/flatseal") ||
                        get("content/blender") ||
-                       get("comms/discord") || get("comms/vesktop") ||
-                       get("comms/spotify") || get("comms/thunderbird") ||
+                       get("comms/telegram") || get("comms/zapzap") ||
+                       get("comms/spotify") || get("comms/stellarium") ||
+                       get("comms/onlyoffice") || get("comms/bazaar") ||
                        get("browsers/librewolf");
     if (needFlatpak) {
         S << InstallStep{"flatpak_pkg", "Install Flatpak",
@@ -241,6 +262,7 @@ QList<InstallStep> MainWizard::buildSteps() const
     }
 
     const QList<QPair<QString,QString>> gamingRpm = {
+        {"kernel_modules_extra", "kernel-modules-extra"},
         {"steam",     "steam"},
         {"lutris",    "lutris"},
         {"mangohud",  "mangohud"},
@@ -337,18 +359,42 @@ QList<InstallStep> MainWizard::buildSteps() const
     }
 
     // ---- Communication & Productivity ----
-    if (get("comms/thunderbird")) {
-        S << flatpakStep("flatpak_thunderbird", "org.mozilla.Thunderbird", "Thunderbird");
+    if (get("comms/antigravity")) {
+        S << InstallStep{"antigravity_repo", "Add Google Antigravity repo",
+            {"bash", "-c",
+             "cat > /etc/yum.repos.d/google-antigravity.repo << 'EOF'\n"
+             "[google-antigravity]\n"
+             "name=Google Antigravity\n"
+             "baseurl=https://antigravity.google/download/linux/rpm\n"
+             "enabled=1\n"
+             "gpgcheck=0\n"
+             "EOF"}};
+        S << InstallStep{"antigravity", "Install Google Antigravity",
+            {"dnf", "-y", "install", "google-antigravity"}};
     }
+
     const QList<QPair<QString,QString>> commsFlatpak = {
-        {"discord",    "com.discordapp.Discord"},
-        {"vesktop",    "dev.vencord.Vesktop"},
+        {"telegram",   "org.telegram.desktop"},
+        {"zapzap",     "com.rtosta.zapzap"},
         {"spotify",    "com.spotify.Client"},
+        {"stellarium", "org.stellarium.Stellarium"},
+        {"onlyoffice", "org.onlyoffice.desktopeditors"},
+        {"bazaar",     "io.github.kolunmi.Bazaar"},
     };
     for (const auto &[key, appid] : commsFlatpak) {
         if (get(QString("comms/%1").arg(key))) {
             S << flatpakStep(QString("flatpak_%1").arg(key), appid, key);
         }
+    }
+    
+    // Autostart para comunicadores se escolhido
+    if (get("comms/telegram") && get("comms/autostart_chats_telegram")) {
+        S << InstallStep{"telegram_autostart", "Enable Telegram Autostart",
+            {"bash", "-c", QString("sudo -u %1 mkdir -p /home/%1/.config/autostart && sudo -u %1 cp /var/lib/flatpak/exports/share/applications/org.telegram.desktop.desktop /home/%1/.config/autostart/").arg(tu).toStdString().c_str()}};
+    }
+    if (get("comms/zapzap") && get("comms/autostart_chats_zapzap")) {
+        S << InstallStep{"zapzap_autostart", "Enable Zapzap Autostart",
+            {"bash", "-c", QString("sudo -u %1 mkdir -p /home/%1/.config/autostart && sudo -u %1 cp /var/lib/flatpak/exports/share/applications/com.rtosta.zapzap.desktop /home/%1/.config/autostart/").arg(tu).toStdString().c_str()}};
     }
     // Blender lives in content but is Flatpak
     if (get("content/blender")) {
@@ -443,11 +489,7 @@ int MainWizard::estimateDiskMB() const
              "distrobox","xrdp","timeshift"})
         if (get(QString("systools/%1").arg(pkg))) mb += 10;
 
-    // Python
-    if (get("python/pip"))     mb += 10;
-    if (get("python/pipx"))    mb += 5;
-    if (get("python/tldr"))    mb += 5;
-    if (get("python/ytdlp"))   mb += 20;
+
 
     // Multimedia
     if (get("media/ffmpeg"))            mb += 50;

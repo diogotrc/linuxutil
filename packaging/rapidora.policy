@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE policyconfig PUBLIC
+  "-//freedesktop//DTD PolicyKit Policy Configuration 1.0//EN"
+  "http://www.freedesktop.org/standards/PolicyKit/1/policyconfig.dtd">
+
+<policyconfig>
+
+  <vendor>LinuxGamerLife</vendor>
+  <vendor_url>https://github.com/linuxgamerlife/rapidora</vendor_url>
+
+  <action id="com.linuxgamerlife.rapidora.run">
+
+    <description>Run Rapidora</description>
+    <message>Rapidora needs administrator privileges to install packages on your system.</message>
+
+    <icon_name>rapidora</icon_name>
+
+    <defaults>
+      <allow_any>auth_admin</allow_any>
+      <allow_inactive>auth_admin</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+
+    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/rapidora</annotate>
+    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+
+  </action>
+
+</policyconfig>

@@ -1,0 +1,212 @@
+aviso: data incorreta em %changelog: Fri Apr 04 2026 Diogo Travassos <diogo@rapidora> - 1.0.6-1
+aviso: data incorreta em %changelog: Fri Apr 04 2026 Diogo Travassos <diogo@rapidora> - 1.0.5-1
+configurando SOURCE_DATE_EPOCH=1775260800
+Executando (%mkbuilddir): /bin/sh -e /var/tmp/rpm-tmp.yqvwcG
+Executando (%prep): /bin/sh -e /var/tmp/rpm-tmp.nJrm1h
++ umask 022
++ cd /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ cd /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ rm -rf rapidora-1.0.5
++ /usr/lib/rpm/rpmuncompress -x /home/diogo/rpmbuild/SOURCES/rapidora-1.0.5.zip
++ STATUS=0
++ '[' 0 -ne 0 ']'
++ cd rapidora-1.0.5
++ /usr/bin/chmod -Rf a+rX,u+w,g-w,o-w .
++ RPM_EC=0
+++ jobs -p
++ exit 0
+Executando (%build): /bin/sh -e /var/tmp/rpm-tmp.RFfrzM
++ umask 022
++ cd /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ CFLAGS='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer  '
++ export CFLAGS
++ CXXFLAGS='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer  '
++ export CXXFLAGS
++ FFLAGS='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -I/usr/lib64/gfortran/modules  '
++ export FFLAGS
++ FCFLAGS='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -I/usr/lib64/gfortran/modules  '
++ export FCFLAGS
++ VALAFLAGS=-g
++ export VALAFLAGS
++ RUSTFLAGS='-Copt-level=3 -Cdebuginfo=2 -Ccodegen-units=1 -Cstrip=none -Cforce-frame-pointers=yes -Clink-arg=-specs=/usr/lib/rpm/redhat/redhat-package-notes --cap-lints=warn'
++ export RUSTFLAGS
++ LDFLAGS='-Wl,-z,relro -Wl,--as-needed  -Wl,-z,pack-relative-relocs -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -Wl,--build-id=sha1 -specs=/usr/lib/rpm/redhat/redhat-package-notes  '
++ export LDFLAGS
++ LT_SYS_LIBRARY_PATH=/usr/lib64:
++ export LT_SYS_LIBRARY_PATH
++ CC=gcc
++ export CC
++ CXX=g++
++ export CXX
++ cd rapidora-1.0.5
++ mkdir -p build
++ cd build
++ cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr
+-- The CXX compiler identification is GNU 16.0.1
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/g++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- Performing Test HAVE_STDATOMIC
+-- Performing Test HAVE_STDATOMIC - Success
+-- Found WrapAtomic: TRUE
+-- Found OpenGL: /usr/lib64/libOpenGL.so
+-- Found WrapOpenGL: TRUE
+-- Found WrapVulkanHeaders: /usr/include
+-- Configuring done (1.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/rapidora-1.0.5/build
++ make -j2
+[  0%] Built target rapidora_autogen_timestamp_deps
+[  0%] Built target tst_installworker_autogen_timestamp_deps
+[  3%] Automatic MOC for target rapidora
+[  7%] Automatic MOC for target tst_installworker
+[  7%] Built target tst_installworker_autogen
+[ 10%] Building CXX object CMakeFiles/tst_installworker.dir/tst_installworker_autogen/mocs_compilation.cpp.o
+[ 10%] Built target rapidora_autogen
+[ 14%] Building CXX object CMakeFiles/tst_installworker.dir/tests/tst_installworker.cpp.o
+[ 17%] Building CXX object CMakeFiles/tst_installworker.dir/src/installworker.cpp.o
+[ 21%] Building CXX object CMakeFiles/rapidora.dir/rapidora_autogen/mocs_compilation.cpp.o
+[ 25%] Linking CXX executable tst_installworker
+[ 28%] Building CXX object CMakeFiles/rapidora.dir/src/main.cpp.o
+[ 32%] Built target tst_installworker
+[ 35%] Building CXX object CMakeFiles/rapidora.dir/src/mainwizard.cpp.o
+[ 39%] Building CXX object CMakeFiles/rapidora.dir/src/installworker.cpp.o
+[ 42%] Building CXX object CMakeFiles/rapidora.dir/src/pages/updatepage.cpp.o
+[ 46%] Building CXX object CMakeFiles/rapidora.dir/src/pages/welcomepage.cpp.o
+[ 50%] Building CXX object CMakeFiles/rapidora.dir/src/pages/repospage.cpp.o
+[ 53%] Building CXX object CMakeFiles/rapidora.dir/src/pages/systemtoolspage.cpp.o
+[ 57%] Building CXX object CMakeFiles/rapidora.dir/src/pages/multimediapage.cpp.o
+[ 60%] Building CXX object CMakeFiles/rapidora.dir/src/pages/contentpage.cpp.o
+[ 64%] Building CXX object CMakeFiles/rapidora.dir/src/pages/gpupage.cpp.o
+[ 67%] Building CXX object CMakeFiles/rapidora.dir/src/pages/gamingpage.cpp.o
+[ 71%] Building CXX object CMakeFiles/rapidora.dir/src/pages/virtpage.cpp.o
+[ 75%] Building CXX object CMakeFiles/rapidora.dir/src/pages/browserspage.cpp.o
+[ 78%] Building CXX object CMakeFiles/rapidora.dir/src/pages/commspage.cpp.o
+[ 82%] Building CXX object CMakeFiles/rapidora.dir/src/languagedialog.cpp.o
+[ 85%] Building CXX object CMakeFiles/rapidora.dir/src/pages/reviewpage.cpp.o
+[ 89%] Building CXX object CMakeFiles/rapidora.dir/src/pages/installpage.cpp.o
+[ 92%] Building CXX object CMakeFiles/rapidora.dir/src/pages/donepage.cpp.o
+[ 96%] Linking CXX executable rapidora
+[100%] Built target rapidora
++ RPM_EC=0
+++ jobs -p
++ exit 0
+Executando (%install): /bin/sh -e /var/tmp/rpm-tmp.RZjTIs
++ umask 022
++ cd /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ '[' /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT '!=' / ']'
++ rm -rf /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT
+++ dirname /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT
++ mkdir -p /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ mkdir /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT
++ CFLAGS='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer  '
++ export CFLAGS
++ CXXFLAGS='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Werror=format-security -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer  '
++ export CXXFLAGS
++ FFLAGS='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -I/usr/lib64/gfortran/modules  '
++ export FFLAGS
++ FCFLAGS='-O2 -flto=auto -ffat-lto-objects -fexceptions -g -grecord-gcc-switches -pipe -Wall -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3 -Wp,-D_GLIBCXX_ASSERTIONS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -fstack-protector-strong -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -m64 -march=x86-64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection -mtls-dialect=gnu2 -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -I/usr/lib64/gfortran/modules  '
++ export FCFLAGS
++ VALAFLAGS=-g
++ export VALAFLAGS
++ RUSTFLAGS='-Copt-level=3 -Cdebuginfo=2 -Ccodegen-units=1 -Cstrip=none -Cforce-frame-pointers=yes -Clink-arg=-specs=/usr/lib/rpm/redhat/redhat-package-notes --cap-lints=warn'
++ export RUSTFLAGS
++ LDFLAGS='-Wl,-z,relro -Wl,--as-needed  -Wl,-z,pack-relative-relocs -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -specs=/usr/lib/rpm/redhat/redhat-hardened-ld-errors -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1  -Wl,--build-id=sha1 -specs=/usr/lib/rpm/redhat/redhat-package-notes  '
++ export LDFLAGS
++ LT_SYS_LIBRARY_PATH=/usr/lib64:
++ export LT_SYS_LIBRARY_PATH
++ CC=gcc
++ export CC
++ CXX=g++
++ export CXX
++ cd rapidora-1.0.5
++ install -Dm755 build/rapidora /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/bin/rapidora
++ install -Dm644 packaging/com.linuxgamerlife.rapidora.desktop /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/applications/com.linuxgamerlife.rapidora.desktop
++ install -Dm644 packaging/rapidora.policy /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/polkit-1/actions/com.linuxgamerlife.rapidora.policy
++ install -Dm644 packaging/rapidora-256.png /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/icons/hicolor/256x256/apps/rapidora.png
++ install -Dm644 packaging/rapidora-128.png /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/icons/hicolor/128x128/apps/rapidora.png
++ install -Dm644 packaging/rapidora-64.png /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/icons/hicolor/64x64/apps/rapidora.png
++ install -Dm644 packaging/rapidora-48.png /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/icons/hicolor/48x48/apps/rapidora.png
++ install -Dm644 packaging/rapidora-256.png /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/pixmaps/rapidora.png
++ install -Dm644 packaging/com.linuxgamerlife.rapidora.metainfo.xml /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/metainfo/com.linuxgamerlife.rapidora.metainfo.xml
++ install -Dm644 src/style.qss /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/rapidora/style.qss
++ /usr/bin/find-debuginfo -j16 --strict-build-id -m -i --build-id-seed 1.0.5-1.fc44 --unique-debug-suffix -1.0.5-1.fc44.x86_64 --unique-debug-src-base rapidora-1.0.5-1.fc44.x86_64 --run-dwz --dwz-low-mem-die-limit 10000000 --dwz-max-die-limit 110000000 --remove-section .gnu.build.attributes -S debugsourcefiles.list /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/rapidora-1.0.5
+find-debuginfo: starting
+Extracting debug info from 1 files
+DWARF-compressing 1 files
+sepdebugcrcfix: Updated 1 CRC32s, 0 CRC32s did match.
+Creating .debug symlinks for symlinks to ELF files
+Copying sources found by 'debugedit -l' to /usr/src/debug/rapidora-1.0.5-1.fc44.x86_64
+find-debuginfo: done
++ /usr/lib/rpm/check-buildroot
++ /usr/lib/rpm/redhat/brp-ldconfig
++ COMPRESS='gzip -9 -n'
++ COMPRESS_EXT=.gz
++ /usr/lib/rpm/brp-compress
++ /usr/lib/rpm/redhat/brp-strip-lto /usr/bin/strip
++ /usr/lib/rpm/check-rpaths
++ /usr/lib/rpm/redhat/brp-mangle-shebangs
++ /usr/lib/rpm/brp-remove-la-files
++ /usr/lib/rpm/redhat/brp-python-rpm-in-distinfo
++ env /usr/lib/rpm/redhat/brp-python-bytecompile '' 1 0 -j16
++ /usr/lib/rpm/redhat/brp-python-hardlink
++ /usr/bin/add-det --brp -j16 /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT
+Scanned 33 directories and 65 files,
+    processed 0 inodes,
+    0 modified (0 replaced + 0 rewritten),
+    0 unsupported format, 0 errors
++ /usr/bin/linkdupes --brp /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr
+Scanned 32 directories and 65 files,
+    considered 65 files, read 4 files, linked 1 files, 0 errors
+    sum of sizes of linked files: 46190 bytes
+Reading /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/SPECPARTS/rpm-debuginfo.specpart
+Processando arquivos: rapidora-1.0.5-1.fc44.x86_64
+Executando (%license): /bin/sh -e /var/tmp/rpm-tmp.xGYCPe
++ umask 022
++ cd /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ cd rapidora-1.0.5
++ LICENSEDIR=/home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/licenses/rapidora
++ export LC_ALL=C.UTF-8
++ LC_ALL=C.UTF-8
++ export LICENSEDIR
++ /usr/bin/mkdir -p /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/licenses/rapidora
++ cp -pr /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/rapidora-1.0.5/LICENSE /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT/usr/share/licenses/rapidora
++ RPM_EC=0
+++ jobs -p
++ exit 0
+Provides: application() application(com.linuxgamerlife.rapidora.desktop) metainfo() metainfo(com.linuxgamerlife.rapidora.metainfo.xml) rapidora = 1.0.5-1.fc44 rapidora(x86-64) = 1.0.5-1.fc44
+Requires(interp): /bin/sh /bin/sh
+Requires(rpmlib): rpmlib(CompressedFileNames) <= 3.0.4-1 rpmlib(FileDigests) <= 4.6.0-1 rpmlib(PartialHardlinkSets) <= 4.0.4-1 rpmlib(PayloadFilesHavePrefix) <= 4.0-1
+Requires(post): /bin/sh
+Requires(postun): /bin/sh
+Requires: libQt6Concurrent.so.6()(64bit) libQt6Concurrent.so.6(Qt_6)(64bit) libQt6Core.so.6()(64bit) libQt6Core.so.6(Qt_6)(64bit) libQt6Core.so.6(Qt_6.10)(64bit) libQt6Gui.so.6()(64bit) libQt6Gui.so.6(Qt_6)(64bit) libQt6Widgets.so.6()(64bit) libQt6Widgets.so.6(Qt_6)(64bit) libc.so.6()(64bit) libc.so.6(GLIBC_2.14)(64bit) libc.so.6(GLIBC_2.2.5)(64bit) libc.so.6(GLIBC_2.34)(64bit) libc.so.6(GLIBC_2.38)(64bit) libc.so.6(GLIBC_2.4)(64bit) libc.so.6(GLIBC_ABI_DT_RELR)(64bit) libgcc_s.so.1()(64bit) libgcc_s.so.1(GCC_3.0)(64bit) libgcc_s.so.1(GCC_3.3.1)(64bit) libstdc++.so.6()(64bit) libstdc++.so.6(CXXABI_1.3)(64bit) libstdc++.so.6(CXXABI_1.3.13)(64bit) libstdc++.so.6(CXXABI_1.3.3)(64bit) libstdc++.so.6(CXXABI_1.3.9)(64bit) libstdc++.so.6(GLIBCXX_3.4)(64bit) libstdc++.so.6(GLIBCXX_3.4.14)(64bit) rtld(GNU_HASH)
+Processando arquivos: rapidora-debugsource-1.0.5-1.fc44.x86_64
+Provides: rapidora-debugsource = 1.0.5-1.fc44 rapidora-debugsource(x86-64) = 1.0.5-1.fc44
+Requires(rpmlib): rpmlib(CompressedFileNames) <= 3.0.4-1 rpmlib(FileDigests) <= 4.6.0-1 rpmlib(PayloadFilesHavePrefix) <= 4.0-1
+Processando arquivos: rapidora-debuginfo-1.0.5-1.fc44.x86_64
+Provides: debuginfo(build-id) = 3b1f1184ff0f98bcfacb0ffc4495826dcfec323e rapidora-debuginfo = 1.0.5-1.fc44 rapidora-debuginfo(x86-64) = 1.0.5-1.fc44
+Requires(rpmlib): rpmlib(CompressedFileNames) <= 3.0.4-1 rpmlib(FileDigests) <= 4.6.0-1 rpmlib(PayloadFilesHavePrefix) <= 4.0-1
+Recommends: rapidora-debugsource(x86-64) = 1.0.5-1.fc44
+Procurando por arquivos desempacotados: /usr/lib/rpm/check-files /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build/BUILDROOT
+Gravou: /home/diogo/rpmbuild/SRPMS/rapidora-1.0.5-1.fc44.src.rpm
+Gravou: /home/diogo/rpmbuild/RPMS/x86_64/rapidora-debugsource-1.0.5-1.fc44.x86_64.rpm
+Gravou: /home/diogo/rpmbuild/RPMS/x86_64/rapidora-1.0.5-1.fc44.x86_64.rpm
+Gravou: /home/diogo/rpmbuild/RPMS/x86_64/rapidora-debuginfo-1.0.5-1.fc44.x86_64.rpm
+Executando (rmbuild): /bin/sh -e /var/tmp/rpm-tmp.ScgX4t
++ umask 022
++ cd /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ test -d /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ /usr/bin/chmod -Rf a+rX,u+w,g-w,o-w /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ rm -rf /home/diogo/rpmbuild/BUILD/rapidora-1.0.5-build
++ RPM_EC=0
+++ jobs -p
++ exit 0
+
+Avisos na construção do RPM:
+    data incorreta em %changelog: Fri Apr 04 2026 Diogo Travassos <diogo@rapidora> - 1.0.6-1
+    data incorreta em %changelog: Fri Apr 04 2026 Diogo Travassos <diogo@rapidora> - 1.0.5-1

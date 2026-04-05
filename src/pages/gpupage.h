@@ -1,13 +1,39 @@
 #pragma once
 #include <QLabel>
 #include <QWizardPage>
-#include <QCheckBox>
-#include <QRadioButton>
-#include <QGroupBox>
-#include <QStackedWidget>
-#include <QMap>
+#include <QButtonGroup>
+#include <QHBoxLayout>
+#include <QProcess>
+#include <QFrame>
+#include <QMouseEvent>
 
 class MainWizard;
+
+class GpuCard : public QFrame {
+    Q_OBJECT
+public:
+    GpuCard(const QString &id, const QString &title, const QString &desc, const QString &iconName, QWidget *parent = nullptr);
+    
+    QString id() const { return m_id; }
+    bool isChecked() const { return m_checked; }
+    void setChecked(bool checked);
+    void addBadge(const QString &text);
+
+signals:
+    void clicked();
+    void toggled(QString id);
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *event) override;
+
+private:
+    void updateStyle();
+
+    QString m_id;
+    bool m_checked;
+    QLabel *m_checkIcon;
+    QVBoxLayout *m_vbox;
+};
 
 class GpuPage : public QWizardPage {
     Q_OBJECT
@@ -16,17 +42,15 @@ public:
     void initializePage() override;
     bool validatePage() override;
 
-private slots:
-    void onGpuChoice();
-    void selectAllAmd();
-    void selectNoneAmd();
-
 private:
-    MainWizard     *m_wiz         = nullptr;
-    QRadioButton   *m_radioAmd    = nullptr;
-    QRadioButton   *m_radioNvidia = nullptr;
-    QRadioButton   *m_radioSkip   = nullptr;
-    QStackedWidget *m_stack       = nullptr;
-    QMap<QString, QCheckBox*> m_amdBoxes;
-    QLabel *m_checkingLabel = nullptr;
+    void autoDetectGPU();
+    void selectCard(const QString &id);
+
+    MainWizard   *m_wiz = nullptr;
+    
+    GpuCard *m_cardAmd = nullptr;
+    GpuCard *m_cardNvidia = nullptr;
+    GpuCard *m_cardSkip = nullptr;
+    
+    QLabel *m_detectedLabel = nullptr;
 };

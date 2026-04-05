@@ -1,6 +1,6 @@
 <div align="center">
 
-# LGL System Loadout
+# Rapidora
 
 **A curated Fedora setup wizard for gaming, content creation, and development.**  
 Pick your loadout. Hit install. Your system is ready.
@@ -16,13 +16,13 @@ Pick your loadout. Hit install. Your system is ready.
 
 ## Overview
 
-LGL System Loadout is a graphical wizard that gets a fresh Fedora install ready in minutes. Choose exactly what you want from a curated list of packages across gaming, multimedia, content creation, development tools, browsers, communication apps, GPU drivers, virtualisation, KDE theming, and the CachyOS kernel.
+Rapidora is an incredibly sophisticated graphical installer (Fork) that gets a fresh Fedora install ready in minutes. It features a fully rewritten UI using a modern, animated "Card-based" Dark Mode with Glow effects, driven by an asynchronous QProcess backend in C++ and Qt6. Choose exactly what you want from a curated repository encompassing Gaming, Multimedia, AI Development Ecosystems, Browsers with PGP injections, and significantly more.
 
-- No terminal needed if you grab the RPM version in releases
-- No defaults - nothing is pre-selected
-- Every item shows its current installed state before you commit
-- All checks run concurrently so pages load instantly
-- Installs only - nothing is removed without your knowledge
+- Written from scratch with a luxurious, animated, and responsive interface.
+- No terminal needed if you use the pre-built RPM packages from Releases.
+- Isolated tools verified dynamically on boot (RPM vs Flatpaks).
+- Fully asynchronous smart-threading architecture ensuring zero UI stutter!
+- This repository is an **Elevated Fork** actively maintained by **Diogo Travassos**, building upon the foundational framework originally envisioned by the *LinuxGamerLife* YouTube channel.
 
 ---
 
@@ -46,11 +46,11 @@ Download the RPM in releases and run it. It will open in Discover, click install
 ### Recommended — COPR (Fedora 43)
 
 ```bash
-sudo dnf copr enable linuxgamerlife/lgl-system-loadout
-sudo dnf install lgl-system-loadout
+sudo dnf copr enable linuxgamerlife/rapidora
+sudo dnf install rapidora
 ```
 
-After installation the app appears in your KDE launcher under **Utilities** as **LGL System Loadout**. Launch it and a single password prompt will appear — the wizard then runs fully elevated.
+After installation the app appears in your KDE launcher under **Utilities** as **Rapidora**. Launch it and a single password prompt will appear — the wizard then runs fully elevated.
 
 ## Building from source
 
@@ -64,9 +64,9 @@ sudo dnf install cmake gcc-c++ qt6-qtbase-devel
 
 ```bash
 mkdir -p ~/projects
-mv ~/Downloads/lgl-system-loadout.zip ~/projects/
+mv ~/Downloads/rapidora.zip ~/projects/
 cd ~/projects
-unzip lgl-system-loadout.zip
+unzip rapidora.zip
 cd lgl-gui-installer
 ```
 
@@ -81,8 +81,8 @@ make -j$(nproc)
 ### 4. Run app
 
 ```bash
-chmod +x lgl-system-loadout
-sudo ./lgl-system-loadout
+chmod +x rapidora
+sudo ./rapidora
 ```
 
 > **Note — Qt version compatibility:** Always build the binary on the same machine you intend to run it on, or on a machine with the same Qt6 version. A binary built against Qt 6.10 will not run on a system with an older Qt6 installed (`version 'Qt_6.10' not found`). If you see this error, either build from source on the target machine or update Qt6 first:
@@ -96,18 +96,17 @@ sudo ./lgl-system-loadout
 
 | Category | Highlights |
 |---|---|
-| **System Update** | Guided `dnf upgrade --refresh` with kernel detection and reboot prompt |
-| **Repositories** | RPM Fusion Free & NonFree |
-| **System Tools** | btop, fastfetch, distrobox, timeshift, xrdp, and more |
-| **System Tweaks** | Disable NetworkManager-wait-online · Clean DNF cache after install |
-| **Python** | pip, pipx, yt-dlp, tldr |
-| **Multimedia** | ffmpeg, GStreamer plugins, VLC |
-| **Content Creation** | OBS Studio, Kdenlive, GIMP, Inkscape, Audacity, Blender |
-| **GPU Drivers** | AMD (Mesa, Vulkan, VA-API, firmware) · NVIDIA (guided) |
-| **Gaming** | Steam, Lutris, Wine, Protontricks, MangoHud, vkBasalt, GOverlay, Heroic, ProtonUp-Qt, ProtonPlus, Flatseal |
-| **Virtualisation** | virt-manager, libvirt, virt-install, virt-viewer |
-| **Browsers** | Firefox, Chromium, Chrome, Brave, Vivaldi, LibreWolf |
-| **Communication** | Thunderbird, Discord, Vesktop, Spotify |
+| **System Update** | Supervised `dnf upgrade --refresh` dynamic key upgrade |
+| **Repositories** | Automatic Global RPM Fusion Free/NonFree ecosystem injection |
+| **System Tools** | C++ Monitored: btop, fastfetch, distrobox, timeshift, and native Fedora utilities |
+| **System Tweaks** | Disable local NetworkManager-wait-online and Automatic GNOME/KDE Cloud Account fixes |
+| **Multimedia** | Full ffmpeg deployment (RPM fusion full-swap), GStreamer configs, VLC |
+| **Content Creation** | OBS Studio for Broadcasters, Kdenlive, GIMP, Inkscape, Audacity, and Sandboxed Blender |
+| **GPU Drivers** | Auto Hardware Detection (LSPCI) -> NVIDIA Drivers (Modules/CUDA) or MESA RADEON |
+| **Gaming** | Grid-Tree UI Interface. Includes Steam, Heroic, Lutris, ProtonUp-Qt, kernel-modules-extra. Smart Runner modifications. |
+| **Virtualisation** | libvirt, virt-manager fully scaled with native automatic usermod grouping. |
+| **Browsers** | Hybrid Setup: PGP Dynamic Repo Injection for Brave/Vivaldi/Chrome, paired with Flatpaks/RPM native integrations for Chromium/Firefox/LibreWolf. |
+| **Communication & Productivity** | Google Antigravity (AI Dev), ZapZap, Telegram Autostarts, Stellarium, OnlyOffice, and Bazaar Tools. |
 | **KDE Theming** | KZones, Panel Colorizer |
 | **CachyOS Kernel** | kernel-cachyos, scx-scheds, scx-manager, scx-tools |
 
@@ -120,5 +119,7 @@ MIT — see [LICENSE](LICENSE) for details.
 ---
 
 <div align="center">
-Made for <a href="https://fedoraproject.org">Fedora</a> · by <a href="https://www.youtube.com/@linuxgamerlife">LinuxGamerLife</a> and ClaudeAI
+Extensively developed by <b>Diogo Travassos</b> (Fork Maintainer) and the Antigravity AI Model.<br>
+<br>
+<sub><i>Rapidora</i> owes its original pillars and structural backend foundation to <a href="https://github.com/LinuxGamerLife">LinuxGamerLife</a> and his original Claude AI assistants. We honor and preserve the open-source license.</sub>
 </div>

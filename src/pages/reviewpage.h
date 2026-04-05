@@ -1,8 +1,9 @@
 #pragma once
 #include <QWizardPage>
-#include <QTextEdit>
 #include <QLabel>
 #include <QPushButton>
+#include <QProgressBar>
+#include <QVBoxLayout>
 
 class MainWizard;
 
@@ -18,9 +19,12 @@ private slots:
 
 private:
     MainWizard  *m_wiz;
-    QTextEdit   *m_textEdit;
+    QProgressBar *m_diskBar;
     QLabel      *m_diskLabel;
+    QLabel      *m_targetBadge;
     QPushButton *m_proceedBtn;
+    QVBoxLayout *m_timelineLayout;
+    QWidget     *m_emptyStateWidget;
     bool         m_diskOk       = true;
     bool         m_proceedForced = false;
 };

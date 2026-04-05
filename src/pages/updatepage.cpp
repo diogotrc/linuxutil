@@ -4,17 +4,18 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QFrame>
 #include <QProcess>
 #include <QScrollBar>
 #include <QApplication>
 #include <QMessageBox>
 
-UpdatePage::UpdatePage(MainWizard *wizard) : QWizardPage(wizard), m_wiz(wizard)
+UpdatePage::UpdatePage(MainWizard *wizard) 
+    : QWizardPage(wizard), m_wiz(wizard)
 {
-    setTitle("System Update");
-    setSubTitle("It is strongly recommended to fully update your system before installing new software.");
+    setTitle(tr("Atualização do Sistema"));
+    setSubTitle(tr("Manter os pacotes de base do Fedora atualizados é essencial antes de efetuarmos injeções profundas de novos programas."));
 }
 
 UpdatePage::~UpdatePage()
@@ -25,22 +26,16 @@ UpdatePage::~UpdatePage()
 void UpdatePage::cleanupProc()
 {
     if (!m_proc) return;
-    // Disconnect all signals first to prevent onReadyRead/onFinished firing
-    // against a partially-torn-down page state during cleanup.
     m_proc->disconnect();
     if (m_proc->state() != QProcess::NotRunning) {
         m_proc->kill();
         m_proc->waitForFinished(3000);
     }
     m_proc->deleteLater();
-    // QPointer automatically becomes null after deleteLater fires.
-    // We don't null it manually — QPointer handles that safely.
 }
 
 void UpdatePage::initializePage()
 {
-    // Clean up any previous run before rebuilding the layout.
-    // This handles the back-navigation re-entry case.
     cleanupProc();
     m_done    = false;
     m_skipped = false;
@@ -52,33 +47,68 @@ void UpdatePage::initializePage()
     }
 
     auto *outer = new QVBoxLayout(this);
-    outer->setSpacing(10);
+    outer->setSpacing(12);
+    outer->setContentsMargins(10, 10, 10, 10);
 
-    // Warning box
+    // 1. Info Box (Card de Alerta)
     auto *warnBox = new QFrame;
-    warnBox->setFrameShape(QFrame::StyledPanel);
+    warnBox->setObjectName("InfoBox");
+    warnBox->setStyleSheet(
+        "QFrame#InfoBox { "
+        "  background-color: rgba(60, 140, 200, 0.15);" // Fundo levemente azulado/info
+        "  border: 1px solid rgba(60, 140, 200, 0.4);"
+        "  border-radius: 8px; "
+        "}"
+    );
+    
     auto *warnLayout = new QVBoxLayout(warnBox);
     auto *warnLabel = new QLabel(
-        "<b>Why update first?</b><br>"
-        "Installing software on top of an outdated system can cause package conflicts, "
-        "dependency errors, and instability. Running a full update ensures your system "
-        "is in a clean, consistent state before we add anything new.<br><br>"
-        "Click <b>Update Now</b> to run <tt>dnf upgrade --refresh</tt>. "
-        "This may take several minutes depending on your connection speed and how many updates are available."
+        tr("<b>Por que atualizar agora?</b><br>"
+           "Instalar novos softwares com bases desatualizadas pode gerar conflitos terríveis de dependências. "
+           "A garantia de sucesso da engine do Rapidora começa por um sistema em estado impecavelmente limpo "
+           "e linear ao que a RedHat e a comunidade distribuem hoje.")
     );
     warnLabel->setWordWrap(true);
+    // Tom amigável e legível
+    warnLabel->setStyleSheet("color: #e0e0e0; font-size: 13px; margin: 5px;");
     warnLayout->addWidget(warnLabel);
     outer->addWidget(warnBox);
 
-    // Button row
+    // 2. Comandos (Top level da área de Log)
     auto *btnWidget = new QWidget;
     auto *btnLayout = new QHBoxLayout(btnWidget);
-    btnLayout->setContentsMargins(0, 0, 0, 0);
+    btnLayout->setContentsMargins(0, 5, 0, 0);
 
-    m_updateBtn = new QPushButton("Update Now");
-    m_updateBtn->setFixedHeight(34);
-    m_skipBtn   = new QPushButton("Skip (not recommended)");
-    m_skipBtn->setFixedHeight(34);
+    m_updateBtn = new QPushButton(tr(" Atualizar Agora "));
+    m_updateBtn->setFixedHeight(36);
+    m_updateBtn->setCursor(Qt::PointingHandCursor);
+    m_updateBtn->setStyleSheet(
+        "QPushButton {"
+        "  background-color: #3db03d;" // Destaque para ação recomendada (Verde)
+        "  color: white;"
+        "  font-weight: bold;"
+        "  border-radius: 6px;"
+        "  padding: 0 20px;"
+        "}"
+        "QPushButton:hover { background-color: #4cd14c; }"
+        "QPushButton:disabled { background-color: #3b3b3b; color: #777777; }"
+    );
+
+    m_skipBtn = new QPushButton(tr(" Pular "));
+    m_skipBtn->setFixedHeight(36);
+    m_skipBtn->setCursor(Qt::PointingHandCursor);
+    m_skipBtn->setStyleSheet(
+        "QPushButton {"
+        "  background-color: transparent;" // Estilo Secundário Limpo
+        "  color: #aaaaaa;"
+        "  border: 1px solid #777777;"
+        "  font-weight: bold;"
+        "  border-radius: 6px;"
+        "  padding: 0 15px;"
+        "}"
+        "QPushButton:hover { background-color: rgba(255,255,255,0.05); color: #ffffff; }"
+        "QPushButton:disabled { border: 1px solid #333333; color: #444444; }"
+    );
 
     connect(m_updateBtn, &QPushButton::clicked, this, &UpdatePage::runUpdate);
     connect(m_skipBtn,   &QPushButton::clicked, this, [this] {
@@ -86,7 +116,7 @@ void UpdatePage::initializePage()
         m_done    = true;
         m_updateBtn->setEnabled(false);
         m_skipBtn->setEnabled(false);
-        m_statusLabel->setText("<span style='color:#cc7700;'>⚠ Update skipped. Proceed at your own risk.</span>");
+        m_statusLabel->setText(tr("<span style='color:#cc7700;'>⚠ Execução pulada pelo usuário. Prossiga sob sua própria responsabilidade.</span>"));
         emit completeChanged();
     });
 
@@ -95,33 +125,53 @@ void UpdatePage::initializePage()
     btnLayout->addStretch();
     outer->addWidget(btnWidget);
 
-    // Status label
+    // 3. Label flutuante de Status
     m_statusLabel = new QLabel;
     m_statusLabel->setWordWrap(true);
     outer->addWidget(m_statusLabel);
 
-    // Kernel update warning box (hidden initially — shown above log when kernel update detected)
+    // 4. Progress Bar (Sutil)
+    m_progressBar = new QProgressBar;
+    m_progressBar->setTextVisible(false);
+    m_progressBar->setFixedHeight(4); // Fina e Indiscreta
+    m_progressBar->setStyleSheet(
+        "QProgressBar {"
+        "  border: none;"
+        "  background: #2a2a2a;"
+        "  border-radius: 2px;"
+        "}"
+        "QProgressBar::chunk {"
+        "  background-color: #3584e4;" // Azul Loader Destaque
+        "  border-radius: 2px;"
+        "}"
+    );
+    m_progressBar->hide(); // Oculta até a operação iniciar
+    outer->addWidget(m_progressBar);
+
+    // 5. Caixa de Alerta p/ Kernel Novo 
     m_kernelBox = new QFrame;
-    m_kernelBox->setFrameShape(QFrame::StyledPanel);
-    m_kernelBox->setStyleSheet("QFrame { border: 2px solid #cc7700; border-radius: 4px; }");
+    m_kernelBox->setObjectName("KernelBox");
+    m_kernelBox->setStyleSheet("QFrame#KernelBox { border: 2px solid #cc7700; border-radius: 8px; background-color: rgba(200, 100, 0, 0.1); }");
+    
     auto *kernelLayout = new QVBoxLayout(m_kernelBox);
     auto *kernelLabel = new QLabel(
-        "<b>⚠ Kernel update detected</b><br><br>"
-        "A new kernel was installed as part of this update. It is strongly recommended to reboot "
-        "before continuing, so that the new kernel is loaded and all modules are in sync.<br><br>"
-        "Please reboot now and rerun <b>LGL System Loadout</b> once you are back."
+        tr("<b>⚠ Atualização de Kernel Detectada</b><br><br>"
+           "Uma parte importantíssima do cérebro do sistema (o Kernel) sofreu alterações. Se formos instalar pacotes base nível-hardware adiante (como drivers GPU Virtuais ou MesaVulkan), eles precisam rastrear os headers deste kernel atualizado ao invés do atual.<br><br>"
+           "Sugerimos <b>Reiniciar Imediatamente</b> e reabrir o Rapidora.")
     );
     kernelLabel->setWordWrap(true);
     kernelLayout->addWidget(kernelLabel);
 
-    m_rebootBtn = new QPushButton("Reboot Now");
-    m_rebootBtn->setFixedHeight(34);
+    m_rebootBtn = new QPushButton(tr("Reiniciar Imediatamente"));
+    m_rebootBtn->setFixedHeight(36);
+    m_rebootBtn->setStyleSheet("background-color: #cc7700; color: white; font-weight: bold; border-radius: 6px; padding: 0 15px;");
     connect(m_rebootBtn, &QPushButton::clicked, this, &UpdatePage::reboot);
 
     auto *kernelBtnLayout = new QHBoxLayout;
     kernelBtnLayout->addWidget(m_rebootBtn);
-    auto *continueAnywayBtn = new QPushButton("Continue Anyway");
-    continueAnywayBtn->setFixedHeight(34);
+    
+    auto *continueAnywayBtn = new QPushButton(tr("Ignorar Risco e Continuar"));
+    continueAnywayBtn->setFixedHeight(36);
     connect(continueAnywayBtn, &QPushButton::clicked, this, [this] {
         m_kernelBox->setVisible(false);
         m_done = true;
@@ -129,33 +179,51 @@ void UpdatePage::initializePage()
     });
     kernelBtnLayout->addWidget(continueAnywayBtn);
     kernelBtnLayout->addStretch();
+    
     kernelLayout->addLayout(kernelBtnLayout);
-
     m_kernelBox->setVisible(false);
     outer->addWidget(m_kernelBox);
 
-    // Log output (stretch=1 so it fills the remaining space below the kernel box)
-    m_log = new QTextEdit;
+    // 6. Output Terminal (Log da operação dnf)
+    m_log = new QPlainTextEdit;
     m_log->setReadOnly(true);
-    m_log->setFont(QFont("monospace"));
-    m_log->setMinimumHeight(200);
+    // Fonte Monospace Fixa
+    QFont monoFont("monospace");
+    monoFont.setStyleHint(QFont::Monospace);
+    monoFont.setPointSize(10);
+    m_log->setFont(monoFont);
+    
+    m_log->setMinimumHeight(220);
+    m_log->setObjectName("LogTerminal");
+    m_log->setStyleSheet(
+        "QPlainTextEdit#LogTerminal {"
+        "  background-color: #121212;" // Superfície dark total
+        "  color: #00ff00;" // Texto Estilo Terminal Matrix
+        "  border: 1px solid #333333;"
+        "  border-radius: 10px;"
+        "  padding: 8px;"
+        "}"
+    );
+    // Fill remaining layout space pushing UI to top
     outer->addWidget(m_log, 1);
 }
 
 void UpdatePage::runUpdate()
 {
-    // Guard against double invocation (e.g. button clicked twice quickly).
     if (m_proc && m_proc->state() != QProcess::NotRunning) return;
 
     m_updateBtn->setEnabled(false);
     m_skipBtn->setEnabled(false);
     m_log->clear();
-    m_statusLabel->setText("<i>Checking current kernel list...</i>");
+    
+    // Mostra progress bar no modo 'Indeterminado/Loading' pulsante
+    m_progressBar->setRange(0, 0); 
+    m_progressBar->show();
+
+    m_statusLabel->setText(tr("<i>Validando ramificações de Kernel do Fedora antes do procedimento...</i>"));
     m_kernelsBefore.clear();
 
-    // Take the before-snapshot asynchronously so we never block the UI thread.
-    // The actual dnf upgrade is started from the snapshot's finished handler.
-    // snap has no parent — it self-deletes via finished -> deleteLater.
+    // Rotina assíncrona p/ ler pacotes RPM
     auto *snap = new QProcess;
     connect(snap, &QProcess::finished, this, [this, snap](int, QProcess::ExitStatus) {
         m_kernelsBefore = QString::fromUtf8(snap->readAllStandardOutput()).trimmed();
@@ -167,11 +235,8 @@ void UpdatePage::runUpdate()
 
 void UpdatePage::startDnfUpgrade()
 {
-    m_statusLabel->setText("<i>Running dnf upgrade --refresh ...</i>");
+    m_statusLabel->setText(tr("<i>Negociando com servidores online... Baixando via <tt>dnf upgrade --refresh</tt>.</i>"));
 
-    // QProcess has NO parent — its lifetime is managed by cleanupProc() and
-    // the finished -> deleteLater connection. A parented QProcess would be
-    // destroyed by Qt's layout teardown at unpredictable times.
     auto *proc = new QProcess;
     proc->setProcessChannelMode(QProcess::MergedChannels);
 
@@ -179,8 +244,10 @@ void UpdatePage::startDnfUpgrade()
     connect(proc, &QProcess::finished,  this, [this](int code, QProcess::ExitStatus st) {
         onFinished(code, st);
 
-        // Take the after-snapshot asynchronously — never block inside a signal handler.
-        // snap2 has no parent — self-deletes via finished -> deleteLater.
+        // Desliga/conclui progress bar 
+        m_progressBar->setRange(0, 100);
+        m_progressBar->setValue(100);
+
         auto *snap2 = new QProcess;
         connect(snap2, &QProcess::finished, this, [this, snap2](int, QProcess::ExitStatus) {
             const QString kernelsAfter = QString::fromUtf8(snap2->readAllStandardOutput()).trimmed();
@@ -188,7 +255,6 @@ void UpdatePage::startDnfUpgrade()
 
             if (kernelsAfter != m_kernelsBefore) {
                 m_kernelBox->setVisible(true);
-                // Don't set m_done yet — user must choose reboot or continue
             } else {
                 m_done = true;
                 emit completeChanged();
@@ -213,13 +279,13 @@ void UpdatePage::onReadyRead()
 void UpdatePage::onFinished(int exitCode, QProcess::ExitStatus)
 {
     if (exitCode == 0) {
-        m_statusLabel->setText("<span style='color:#3db03d;'>✓ System update complete.</span>");
+        m_statusLabel->setText(tr("<span style='color:#3db03d;'>✓ Integrações validadas e Sistema Atualizado de ponta a ponta com sucesso.</span>"));
     } else {
         m_statusLabel->setText(
-            QString("<span style='color:#cc0000;'>✗ Update finished with exit code %1. "
-                    "Check the log above. You can still continue.</span>").arg(exitCode)
+            QString(tr("<span style='color:#cc0000;'>✗ A atualização finalizou com um código anômalo estrutural da RedHat (%1). "
+                       "Analise os logs no terminal virtual abaixo. Você ainda pode forçar a continuação se julgar seguro.</span>")).arg(exitCode)
         );
-        m_done = true;
+        m_done = true; // Liberamos para avançar (ignorar)
         emit completeChanged();
     }
 }
@@ -227,10 +293,10 @@ void UpdatePage::onFinished(int exitCode, QProcess::ExitStatus)
 void UpdatePage::reboot()
 {
     QMessageBox::StandardButton reply = QMessageBox::question(
-        this, "Confirm Reboot",
-        "Reboot now?\n\n"
-        "Make sure you have saved any open files or work in other applications before rebooting. "
-        "LGL System Loadout will need to be run again after the reboot.",
+        this, tr("Confirmação de Reinício"),
+        tr("Reiniciar o Servidor Gráfico e a Máquina agora?\n\n"
+           "Garanta que trabalhos essenciais foram salvos em outras janelas antes de prosseguir. "
+           "O assistente do Rapidora precisará ser lançado novamente desde o menu pelo seu usuário após reiniciar o sistema."),
         QMessageBox::Yes | QMessageBox::No
     );
     if (reply == QMessageBox::Yes) {

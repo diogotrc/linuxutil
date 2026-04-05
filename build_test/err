@@ -1,0 +1,12 @@
+[  0%] Built target rapidora_autogen_timestamp_deps
+[  4%] Built target rapidora_autogen
+[  8%] Building CXX object CMakeFiles/rapidora.dir/src/pages/installpage.cpp.o
+/home/diogo/Documentos/Oppy Config/linuxutil/src/pages/installpage.cpp: In member function ‘void InstallPage::onStepSkipped(const QString&, const QString&)’:
+/home/diogo/Documentos/Oppy Config/linuxutil/src/pages/installpage.cpp:258:67: error: unused parameter ‘description’ [-Werror=unused-parameter]
+  258 | void InstallPage::onStepSkipped(const QString &id, const QString &description)
+      |                                                    ~~~~~~~~~~~~~~~^~~~~~~~~~~
+cc1plus: all warnings being treated as errors
+make[3]: *** [CMakeFiles/rapidora.dir/build.make:337: CMakeFiles/rapidora.dir/src/pages/installpage.cpp.o] Error 1
+make[2]: *** [CMakeFiles/Makefile2:95: CMakeFiles/rapidora.dir/all] Error 2
+make[1]: *** [CMakeFiles/Makefile2:102: CMakeFiles/rapidora.dir/rule] Error 2
+make: *** [Makefile:179: rapidora] Error 2

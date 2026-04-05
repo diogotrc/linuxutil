@@ -1,8 +1,30 @@
-# Changelog
-
-All notable changes to LGL System Loadout are documented here.
-
 ---
+
+## [1.0.6] - 2026-04-04
+
+### Added
+- **Novo Ícone Oficial** — Identidade visual definitiva integrada em todos os tamanhos (256px a 48px).
+
+### Fixed
+- **Crash de Idioma** — Corrigida falha de segmentação ao selecionar o idioma Inglês no diálogo inicial devido a captura incorreta de referência em lambda.
+- **Alinhamento na WelcomePage** — Badges "Instalado" e "Não Instalado" agora possuem largura fixa de 110px, garantindo o alinhamento perfeito do texto descritivo lateral.
+
+## [1.0.5] - 2026-04-04
+
+### Added
+- **Nova Tela Final (DonePage)** — herocard com glow, animações de fade-in e badges dinâmicos por categoria instalada.
+- **Detecção de Reboot inteligente** — isRebootRequired() detecta se drivers de GPU, Virtualização ou atualizações de kernel exigem reinicialização.
+- **Sistema de QSS Global** — tokens unificados em `style.qss` para cores, bordas, sombras e micro-interações em todo o assistente.
+- **Sincronização de Idioma Nativa** — LanguageDialog integrado diretamente no fluxo de inicialização.
+
+### Changed
+- **Interface Modernizada** — Badges de status padronizados com largura fixa para evitar saltos de layout.
+- **Remoção de Legado** — Páginas CachyOS e Theming removidas do wizard principal.
+- **Fallback de Ícones** — Lógica de detecção de ícones de navegadores aprimorada com caminhos de sistema comuns.
+
+### Fixed
+- **Entidades HTML no Sumário** — Corrigido erro de renderização do `&nbsp;` no badge do Sumário Executivo.
+- **Estabilidade de Layout** — Corrigidos saltos horizontais nas páginas de seleção durante carregamento assíncrono.
 
 ## [1.0.4] - 2026-03-10
 
@@ -29,11 +51,11 @@ Special thanks to **Mojibake.d** for being the first to identify and report bugs
 > ![Mojibake.d](https://yt3.ggpht.com/8KwpCLVUhfsZmY5RyhI4e0vq1qk7hNaNcwRL1WmLjjsHUEMV2L5W_RpDOVgkR8YOZzVl0j-s43k=s88-c-k-c0x00ffffff-no-rj) **Mojibake.d** — thank you for testing the first release, catching these issues, and taking the time to report them. You made 1.0.1 happen.
 
 ### Fixed
-- **Panel Colorizer download failing** — the download path used `QTemporaryDir` whose generated path contained spaces (e.g. `/tmp/LGL System Loadout-XXXXX/`). The spaces broke the bash variable expansion inside the shell step, causing `ls: cannot access '/tmp/LGL'` and a failed download. Fixed by using a fixed, space-free path `/tmp/lgl-panel-colorizer.plasmoid`.
+- **Panel Colorizer download failing** — the download path used `QTemporaryDir` whose generated path contained spaces (e.g. `/tmp/Rapidora-XXXXX/`). The spaces broke the bash variable expansion inside the shell step, causing `ls: cannot access '/tmp/LGL'` and a failed download. Fixed by using a fixed, space-free path `/tmp/lgl-panel-colorizer.plasmoid`.
 - **Panel Colorizer log output showing garbled/encrypted text** — the `file` command was run on the downloaded `.plasmoid` (which is a ZIP archive) and its binary output was written directly to the log window. Removed the `file` command from the download step; the log now shows only the curl progress and `ls` size confirmation.
 - **KZones download path** — same space-in-path issue as Panel Colorizer. Fixed to use `/tmp/lgl-kzones.kwinscript`.
 - **Kernel warning box overlapping log output** — on the System Update page, the kernel update warning box was added to the layout *after* the log widget with a stretch factor, causing it to render on top of the log when it became visible. Fixed by adding the kernel box to the layout *before* the log, so it pushes the log down cleanly when shown.
-- **Reboot confirmation dialog unclear** — the message "Unsaved work will be lost" was ambiguous. Updated to clearly state that any open files or applications from before launching LGL System Loadout should be saved, and that the wizard will need to be run again after rebooting.
+- **Reboot confirmation dialog unclear** — the message "Unsaved work will be lost" was ambiguous. Updated to clearly state that any open files or applications from before launching Rapidora should be saved, and that the wizard will need to be run again after rebooting.
 
 ### Added
 - **Secure Boot warning on CachyOS Kernel page** — a prominent red warning box now appears at the top of the CachyOS page explaining that Secure Boot must be disabled in BIOS/UEFI after installing the kernel, as the CachyOS kernel is not signed with a Microsoft-trusted key. Includes guidance on how to enter BIOS and which key to press.
@@ -56,7 +78,7 @@ Special thanks to **Mojibake.d** for being the first to identify and report bugs
 ## [1.0.0] — 2026-03-09
 
 ### Added
-- **pkexec / polkit support** — the app now ships with a `.desktop` file and a polkit policy (`lgl-system-loadout.policy`). When launched from the app launcher, the system authentication dialog prompts for a password once and the wizard runs fully elevated from there. No need to launch from a terminal with `sudo`.
+- **pkexec / polkit support** — the app now ships with a `.desktop` file and a polkit policy (`rapidora.policy`). When launched from the app launcher, the system authentication dialog prompts for a password once and the wizard runs fully elevated from there. No need to launch from a terminal with `sudo`.
 - **System Update page** — new page 2, before all selection pages. Runs `dnf upgrade --refresh` with a live scrolling log output. Skipping is optional but warned against. On completion, detects whether a new kernel was installed and presents a **Reboot Now** button (with confirmation) or **Continue Anyway**.
 - **LibreWolf** added to Browsers page as a Flatpak option (`io.gitlab.librewolf-community`), under a new "Privacy-focused" section.
 

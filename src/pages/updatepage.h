@@ -1,11 +1,12 @@
 #pragma once
 #include <QWizardPage>
-#include <QTextEdit>
+#include <QPlainTextEdit>
 #include <QLabel>
 #include <QPushButton>
 #include <QFrame>
 #include <QPointer>
 #include <QProcess>
+#include <QProgressBar>
 
 class MainWizard;
 
@@ -26,23 +27,22 @@ private slots:
     void reboot();
 
 private:
-    // Kills and deletes any running m_proc. Safe to call if m_proc is null.
+    // Finaliza com segurança os processos assíncronos
     void cleanupProc();
 
-    MainWizard  *m_wiz;
-    QTextEdit   *m_log         = nullptr;
-    QLabel      *m_statusLabel = nullptr;
-    QPushButton *m_updateBtn   = nullptr;
-    QPushButton *m_skipBtn     = nullptr;
-    QPushButton *m_rebootBtn   = nullptr;
-    QFrame      *m_kernelBox   = nullptr;
+    MainWizard     *m_wiz;
+    QPlainTextEdit *m_log         = nullptr;
+    QProgressBar   *m_progressBar = nullptr;
+    QLabel         *m_statusLabel = nullptr;
+    QPushButton    *m_updateBtn   = nullptr;
+    QPushButton    *m_skipBtn     = nullptr;
+    QPushButton    *m_rebootBtn   = nullptr;
+    QFrame         *m_kernelBox   = nullptr;
 
-    // QPointer so stale-pointer checks are safe after async deletion.
-    // m_proc has no parent — lifetime managed via cleanupProc() and deleteLater().
+    // Gerencia o ponteiro para processo sem travar o teardown caso removido da tela
     QPointer<QProcess> m_proc;
 
-    // Kernel list snapshot taken before dnf upgrade, populated asynchronously.
-    // Compared against a post-upgrade snapshot to detect new kernel installs.
+    // Histórico de kernels para validar se atualizou algo crítico e pedir reboot
     QString            m_kernelsBefore;
 
     bool         m_done        = false;

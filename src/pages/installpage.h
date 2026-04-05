@@ -8,6 +8,9 @@
 #include <QPointer>
 #include <QMap>
 #include <QSplitter>
+#include <QFrame>
+#include <QPushButton>
+#include <QEvent>
 #include "../installworker.h"
 
 class MainWizard;
@@ -21,6 +24,9 @@ public:
     void initializePage() override;
     bool isComplete()     const override;
 
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
+
 private slots:
     void onStepStarted(const QString &id, const QString &description);
     void onStepFinished(const QString &id, bool success, int exitCode);
@@ -28,30 +34,25 @@ private slots:
     void onLogLine(const QString &line);
     void onAllDone(int errorCount);
     void onStepClicked(QListWidgetItem *item);
+    void toggleCompactMode();
 
 private:
-    // Signals the worker to cancel and blocks until the thread exits.
-    // Only called from the destructor — do not call from the main thread
-    // while the event loop is running, as it will block the UI.
     void shutdownWorkerSync();
 
     MainWizard     *m_wiz;
     QListWidget    *m_stepList        = nullptr;
-    QPlainTextEdit *m_fullLog         = nullptr;
     QPlainTextEdit *m_stepDetail      = nullptr;
-    QLabel         *m_stepDetailLabel = nullptr;
     QProgressBar   *m_progress        = nullptr;
     QLabel         *m_statusLabel     = nullptr;
+    QSplitter      *m_mainSplitter    = nullptr;
+    QWidget        *m_logContainer    = nullptr;
+    QPushButton    *m_toggleViewBtn   = nullptr;
 
-    // Raw pointers are intentionally not parented to this page.
-    // Thread and worker lifetimes are managed explicitly:
-    //   - worker: QThread::finished -> QObject::deleteLater
-    //   - thread: QThread::finished -> QThread::deleteLater (self-cleanup)
-    // QPointer<> is used so that stale pointer checks are safe after async deletion.
     QPointer<QThread>        m_thread;
     QPointer<InstallWorker>  m_worker;
 
     bool            m_done            = false;
+    bool            m_compactMode     = false;
     int             m_totalSteps      = 0;
     int             m_doneSteps       = 0;
 

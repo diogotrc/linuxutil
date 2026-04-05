@@ -3,6 +3,7 @@
 #include <QWizardPage>
 #include <QCheckBox>
 #include <QMap>
+#include <QFrame>
 
 class MainWizard;
 
@@ -12,6 +13,7 @@ public:
     explicit ReposPage(MainWizard *wizard);
     void initializePage() override;
     bool validatePage() override;
+
 private:
     MainWizard               *m_wiz;
     QMap<QString, QCheckBox*> m_boxes;

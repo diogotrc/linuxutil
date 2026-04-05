@@ -5,6 +5,7 @@
 #include <QProgressBar>
 #include <QListWidget>
 #include <QPlainTextEdit>
+#include <QPushButton>
 #include "installpage.h"
 #include "../mainwizard.h"
 #include <QVBoxLayout>
@@ -16,118 +17,168 @@
 
 InstallPage::InstallPage(MainWizard *wizard) : QWizardPage(wizard), m_wiz(wizard)
 {
-    setTitle("Installing");
-    setSubTitle("Installation is in progress. Please do not close this window.");
+    setTitle(tr("Construindo o Sistema"));
+    setSubTitle(tr("As operações automáticas foram delegadas aos Workers no background."));
 
     auto *layout = new QVBoxLayout(this);
-    layout->setSpacing(6);
+    layout->setSpacing(15);
+    layout->setContentsMargins(15, 15, 15, 15);
 
-    m_statusLabel = new QLabel("Preparing...");
-    layout->addWidget(m_statusLabel);
-
-    // Patience message
+    // ==========================================
+    // Localização: Mensagem de Paciência
+    // ==========================================
     auto *patienceFrame = new QFrame;
     patienceFrame->setFrameShape(QFrame::StyledPanel);
-    patienceFrame->setStyleSheet("QFrame { background: palette(midlight); border-radius: 4px; padding: 2px; }");
+    patienceFrame->setStyleSheet("QFrame { background-color: rgba(53, 132, 228, 0.1); border: 1px solid rgba(53, 132, 228, 0.3); border-radius: 8px; }");
+    
     auto *patienceLayout = new QHBoxLayout(patienceFrame);
-    patienceLayout->setContentsMargins(8, 4, 8, 4);
-    auto *patienceLabel = new QLabel(
-        "Some packages may take a while to download and install. "
-        "If it appears to have frozen, it probably has not. "
-        "Please be patient -- or go make a cup of tea!"
-    );
+    patienceLayout->setContentsMargins(15, 12, 15, 12);
+    patienceLayout->setSpacing(12);
+
+    auto *patienceIcon = new QLabel("☕");
+    patienceIcon->setStyleSheet("font-size: 28px; background: transparent; border: none;");
+    
+    auto *textLayout = new QVBoxLayout;
+    
+    auto *patienceTitle = new QLabel(tr("<b>Paciência é uma virtude! ⏳</b>"));
+    patienceTitle->setStyleSheet("color: #8cbcf8; font-size: 15px; background: transparent; border: none;");
+
+    auto *patienceLabel = new QLabel(tr(
+        "Alguns pacotes podem demorar para baixar e instalar devido a espelhos gringos. "
+        "Se parecer que travou, <b>provavelmente não travou</b>. O rastreador ainda roda na Engine C++ em background.<br>"
+        "Seja paciente — ou vá tomar um café enquanto montamos sua fortaleza!"
+    ));
     patienceLabel->setWordWrap(true);
-    patienceLayout->addWidget(patienceLabel);
+    patienceLabel->setStyleSheet("color: #b0b0b0; font-size: 13px; background: transparent; border: none;");
+    
+    textLayout->addWidget(patienceTitle);
+    textLayout->addWidget(patienceLabel);
+    
+    patienceLayout->addWidget(patienceIcon);
+    patienceLayout->addLayout(textLayout, 1);
+    
     layout->addWidget(patienceFrame);
 
+    // ==========================================
+    // Status e Toggle Vibecoding
+    // ==========================================
+    auto *statusHeaderLayout = new QHBoxLayout;
+    
+    m_statusLabel = new QLabel(tr("Aguardando inicialização do despachante..."));
+    m_statusLabel->setStyleSheet("color: #ffffff; font-weight: bold; font-size: 14px;");
+    
+    m_toggleViewBtn = new QPushButton(tr("👁 Esconder Metadados (Modo Compacto)"));
+    m_toggleViewBtn->setCursor(Qt::PointingHandCursor);
+    m_toggleViewBtn->setStyleSheet("QPushButton { background-color: rgba(255,255,255,0.05); color: #8cbcf8; font-weight: bold; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(53, 132, 228, 0.4); } QPushButton:hover { background-color: rgba(53, 132, 228, 0.2); border-color: #3584e4; color: white;}");
+    connect(m_toggleViewBtn, &QPushButton::clicked, this, &InstallPage::toggleCompactMode);
+
+    statusHeaderLayout->addWidget(m_statusLabel);
+    statusHeaderLayout->addStretch();
+    statusHeaderLayout->addWidget(m_toggleViewBtn);
+
+    layout->addLayout(statusHeaderLayout);
+
+    // ==========================================
+    // Progress Bar Personalizada
+    // ==========================================
     m_progress = new QProgressBar;
     m_progress->setRange(0, 100);
     m_progress->setValue(0);
+    // Design vibrante 20px de grossura e cantos redondos contínuos
+    m_progress->setStyleSheet(
+        "QProgressBar { background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; text-align: center; color: white; font-weight: bold; min-height: 22px; font-size: 13px; }"
+        "QProgressBar::chunk { background-color: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #2bba2b, stop:1 #4cd14c); border-radius: 8px; }"
+    );
     layout->addWidget(m_progress);
 
-    QFont mono("Monospace");
-    mono.setStyleHint(QFont::TypeWriter);
-    mono.setPointSize(9);
+    // ==========================================
+    // Painel Duplo - GUI Async
+    // ==========================================
+    m_mainSplitter = new QSplitter(Qt::Horizontal);
 
-    auto *topSplitter = new QSplitter(Qt::Horizontal);
-
+    // Lista Esquerda
     m_stepList = new QListWidget;
-    m_stepList->setMinimumWidth(220);
-    m_stepList->setMaximumWidth(340);
-    topSplitter->addWidget(m_stepList);
+    m_stepList->setMinimumWidth(280);
+    m_stepList->setMaximumWidth(400);
+    m_stepList->setFocusPolicy(Qt::NoFocus);
+    m_stepList->setStyleSheet(
+        "QListWidget { background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; outline: none; padding: 6px; }"
+        "QListWidget::item { padding: 8px; border-radius: 6px; margin-bottom: 3px; color: #bbbbbb; }"
+        "QListWidget::item:selected { background-color: rgba(53, 132, 228, 0.25); color: white; font-weight: bold; border: 1px solid rgba(53,132,228,0.5); }"
+        "QListWidget::item:hover { background-color: rgba(255,255,255,0.05); }"
+    );
+    m_mainSplitter->addWidget(m_stepList);
 
-    m_fullLog = new QPlainTextEdit;
-    m_fullLog->setReadOnly(true);
-    m_fullLog->setFont(mono);
-    m_fullLog->setPlaceholderText("Full install log will appear here...");
-    topSplitter->addWidget(m_fullLog);
-
-    topSplitter->setStretchFactor(0, 0);
-    topSplitter->setStretchFactor(1, 1);
-
-    m_stepDetailLabel = new QLabel("Click a step on the left to see its output.");
-    m_stepDetailLabel->setStyleSheet("font-style: italic;");
-
+    // Log Direita
     m_stepDetail = new QPlainTextEdit;
     m_stepDetail->setReadOnly(true);
+    QFont mono("Monospace");
+    mono.setStyleHint(QFont::TypeWriter);
+    mono.setPointSize(10);
     m_stepDetail->setFont(mono);
-    m_stepDetail->setPlaceholderText("Step output will appear here when you click a step.");
+    // Coletor em background puro (preto 1a1a1a simulando Terminal Real)
+    m_stepDetail->setStyleSheet("QPlainTextEdit { background-color: #111111; color: #a5d6a7; border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; }");
+    m_stepDetail->setPlaceholderText(tr("O fluxo STDOUT dos contêineres e logs DNF será alimentado em tempo-real aqui.\nClique em uma Categoria à esquerda para auditar..."));
+    
+    // Captura Cliques brutos no QTextEdit
+    m_stepDetail->viewport()->installEventFilter(this);
 
-    auto *vSplitter = new QSplitter(Qt::Vertical);
-    vSplitter->addWidget(topSplitter);
+    m_mainSplitter->addWidget(m_stepDetail);
 
-    auto *detailWidget = new QWidget;
-    auto *detailLayout = new QVBoxLayout(detailWidget);
-    detailLayout->setContentsMargins(0, 0, 0, 0);
-    detailLayout->setSpacing(2);
-    detailLayout->addWidget(m_stepDetailLabel);
-    detailLayout->addWidget(m_stepDetail);
-    vSplitter->addWidget(detailWidget);
+    // Pesos Mágicos p/ Distribuição
+    m_mainSplitter->setStretchFactor(0, 1);
+    m_mainSplitter->setStretchFactor(1, 4);
 
-    vSplitter->setStretchFactor(0, 3);
-    vSplitter->setStretchFactor(1, 1);
-
-    layout->addWidget(vSplitter);
+    layout->addWidget(m_mainSplitter, 1);
 
     connect(m_stepList, &QListWidget::itemClicked, this, &InstallPage::onStepClicked);
 }
 
 InstallPage::~InstallPage() { shutdownWorkerSync(); }
 
+bool InstallPage::eventFilter(QObject *obj, QEvent *event) {
+    if (obj == m_stepDetail->viewport() && event->type() == QEvent::MouseButtonRelease) {
+        // Interatividade Expand Log
+        emit m_toggleViewBtn->clicked();
+        return true;
+    }
+    return QWizardPage::eventFilter(obj, event);
+}
+
+void InstallPage::toggleCompactMode() {
+    m_compactMode = !m_compactMode;
+    m_mainSplitter->setVisible(!m_compactMode);
+    
+    if (m_compactMode) {
+        m_toggleViewBtn->setText(tr("👁 Exibir Interações (Modo Completo)"));
+        m_toggleViewBtn->setStyleSheet("QPushButton { background-color: rgba(43, 122, 66, 0.4); color: white; font-weight: bold; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(43, 122, 66, 0.8); } QPushButton:hover { background-color: rgba(43, 122, 66, 0.6); }");
+    } else {
+        m_toggleViewBtn->setText(tr("👁 Esconder Metadados (Modo Compacto)"));
+        m_toggleViewBtn->setStyleSheet("QPushButton { background-color: rgba(255,255,255,0.05); color: #8cbcf8; font-weight: bold; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(53, 132, 228, 0.4); } QPushButton:hover { background-color: rgba(53, 132, 228, 0.2); border-color: #3584e4; color: white;}");
+    }
+}
+
 void InstallPage::shutdownWorkerSync()
 {
-    // This is the destructor-only synchronous shutdown path.
-    // We must block until the thread exits so Qt does not attempt to deliver
-    // queued signals to a destroyed InstallPage after we return.
     if (m_worker) {
         m_worker->cancel();
-        // m_worker is on m_thread; cancel() is thread-safe (atomic flag).
-        // Do not touch m_worker further — it will be deleted via the
-        // finished -> deleteLater connection once the thread exits.
     }
     if (m_thread) {
         m_thread->quit();
-        m_thread->wait(); // Block until thread exits — safe in destructor only.
-        // m_thread has no parent and will self-delete via its own
-        // finished -> deleteLater connection, which fired before wait() returned.
+        m_thread->wait(); 
     }
-    // QPointers are now null — no further cleanup required.
 }
 
 void InstallPage::initializePage()
 {
     wizard()->button(QWizard::BackButton)->setEnabled(false);
+    wizard()->button(QWizard::NextButton)->setEnabled(false);
 
-    // If a previous run is somehow still alive (e.g. re-entry during testing),
-    // cancel it and let the signal-driven cleanup finish asynchronously.
-    // The QPointers will be null once the objects are deleted.
     if (m_worker) m_worker->cancel();
     if (m_thread) m_thread->quit();
 
     m_stepList->clear();
-    m_fullLog->clear();
     m_stepDetail->clear();
-    m_stepDetailLabel->setText("Click a step on the left to see its output.");
     m_stepItems.clear();
     m_stepLogs.clear();
     m_done = false;
@@ -140,26 +191,20 @@ void InstallPage::initializePage()
     m_progress->setValue(0);
 
     for (const InstallStep &step : steps) {
-        auto *item = new QListWidgetItem("[..]  " + step.description);
+        auto *item = new QListWidgetItem("⏳  " + step.description);
         item->setData(Qt::UserRole, step.id);
+        item->setData(Qt::UserRole + 1, step.description); // Pbackup limpo da string crua!
         m_stepList->addItem(item);
         m_stepItems[step.id] = item;
         m_stepLogs[step.id]  = QString();
     }
 
-    // Thread has NO parent — its lifetime is managed entirely by the
-    // finished -> deleteLater connection below. Giving it a parent would
-    // create a race between Qt parent-child destruction and moveToThread,
-    // which TSan correctly flags as a data race.
     auto *thread = new QThread;
     auto *worker = new InstallWorker;
     worker->setSteps(steps);
     worker->moveToThread(thread);
 
-    // Worker lifetime: deleted on the thread it lives on, after it finishes.
     connect(thread, &QThread::finished,           worker, &QObject::deleteLater);
-    // Thread lifetime: self-deletes after its event loop exits.
-    // No parent owns this QThread — deleteLater is the sole cleanup path.
     connect(thread, &QThread::finished,           thread, &QThread::deleteLater);
 
     connect(thread, &QThread::started,            worker, &InstallWorker::run);
@@ -168,10 +213,8 @@ void InstallPage::initializePage()
     connect(worker, &InstallWorker::stepSkipped,  this,   &InstallPage::onStepSkipped);
     connect(worker, &InstallWorker::logLine,      this,   &InstallPage::onLogLine);
     connect(worker, &InstallWorker::allDone,      this,   &InstallPage::onAllDone);
-    // Worker signals thread to stop its event loop when done.
     connect(worker, &InstallWorker::allDone,      thread, &QThread::quit);
 
-    // Store as QPointers so any post-deletion access is a safe null check.
     m_thread = thread;
     m_worker = worker;
 
@@ -181,9 +224,13 @@ void InstallPage::initializePage()
 void InstallPage::onStepStarted(const QString &id, const QString &description)
 {
     m_currentStepId = id;
-    m_statusLabel->setText(QString("Running: %1").arg(description));
+    m_statusLabel->setText(tr("🟢 Aterrisando: ") + description + " ...");
+    
     if (m_stepItems.contains(id)) {
-        m_stepItems[id]->setText(" >>   " + description);
+        // Play na seta azul
+        m_stepItems[id]->setText("▶  " + m_stepItems[id]->data(Qt::UserRole + 1).toString());
+        m_stepItems[id]->setForeground(QColor(53, 132, 228)); 
+        m_stepList->setCurrentItem(m_stepItems[id]); // Auto-follow view!
         m_stepList->scrollToItem(m_stepItems[id]);
     }
 }
@@ -194,15 +241,14 @@ void InstallPage::onStepFinished(const QString &id, bool success, int exitCode)
     m_progress->setValue(m_doneSteps);
 
     if (m_stepItems.contains(id)) {
-        const QString prefix = success ? "[OK]  " : "[!!]  ";
-        m_stepItems[id]->setText(prefix + m_stepItems[id]->text().mid(6));
-        m_stepItems[id]->setForeground(success ? QColor(60, 180, 60) : QColor(200, 60, 60));
+        m_stepItems[id]->setText((success ? "✅  " : "❌  ") + m_stepItems[id]->data(Qt::UserRole + 1).toString());
+        m_stepItems[id]->setForeground(success ? QColor(76, 209, 76) : QColor(255, 80, 80));
     }
 
     if (m_stepLogs.contains(id))
         m_stepLogs[id] += success
-            ? QString("\n[Exit 0 - OK]")
-            : QString("\n[Exit %1 - FAILED]").arg(exitCode);
+            ? QString("\n[Sistema: Exit 0 - Camada Acoplada com Sucesso]")
+            : QString("\n[Sistema: Exit %1 - FALHA DE ATERRISAGEM]").arg(exitCode);
 
     QListWidgetItem *sel = m_stepList->currentItem();
     if (sel && sel->data(Qt::UserRole).toString() == id)
@@ -211,22 +257,20 @@ void InstallPage::onStepFinished(const QString &id, bool success, int exitCode)
 
 void InstallPage::onStepSkipped(const QString &id, const QString &description)
 {
+    Q_UNUSED(description);
     m_doneSteps++;
     m_progress->setValue(m_doneSteps);
 
     if (m_stepItems.contains(id)) {
-        m_stepItems[id]->setText("[--]  " + description);
-        m_stepItems[id]->setForeground(QColor(120, 120, 180));
+        m_stepItems[id]->setText("⏭️  " + m_stepItems[id]->data(Qt::UserRole + 1).toString());
+        m_stepItems[id]->setForeground(QColor(130, 130, 160));
     }
     if (m_stepLogs.contains(id))
-        m_stepLogs[id] += "[Already installed - skipped]\n";
+        m_stepLogs[id] += "[Camada bypassada por já existir pre-instalada localmente.]\n";
 }
 
 void InstallPage::onLogLine(const QString &line)
 {
-    m_fullLog->appendPlainText(line);
-    m_fullLog->verticalScrollBar()->setValue(m_fullLog->verticalScrollBar()->maximum());
-
     if (!m_currentStepId.isEmpty() && m_stepLogs.contains(m_currentStepId))
         m_stepLogs[m_currentStepId] += line + "\n";
 
@@ -240,46 +284,52 @@ void InstallPage::onLogLine(const QString &line)
 void InstallPage::onStepClicked(QListWidgetItem *item)
 {
     if (!item) return;
-    const QString id       = item->data(Qt::UserRole).toString();
-    const QString stepText = item->text().mid(6);
-
-    m_stepDetailLabel->setText(QString("Output for: %1").arg(stepText));
+    const QString id = item->data(Qt::UserRole).toString();
 
     if (m_stepLogs.contains(id) && !m_stepLogs[id].isEmpty()) {
         m_stepDetail->setPlainText(m_stepLogs[id]);
         m_stepDetail->verticalScrollBar()->setValue(m_stepDetail->verticalScrollBar()->maximum());
     } else {
-        m_stepDetail->setPlainText("(No output yet for this step)");
+        m_stepDetail->setPlainText(tr("(O console DNF emitirá a stream aqui assim que o passo iniciar...)"));
     }
 }
 
 void InstallPage::onAllDone(int errorCount)
 {
     m_done = true;
-    // Do not null m_worker here. The worker will be deleted asynchronously via
-    // the QThread::finished -> QObject::deleteLater connection. The QPointer
-    // will automatically become null when that deletion occurs.
 
     QStringList failedSteps;
     for (auto it = m_stepItems.constBegin(); it != m_stepItems.constEnd(); ++it) {
-        if (it.value()->text().startsWith("[!!]")) {
+        if (it.value()->text().startsWith("❌")) {
             const QString id   = it.key();
-            const QString desc = it.value()->text().mid(6);
+            const QString desc = it.value()->data(Qt::UserRole + 1).toString();
             failedSteps << QString("Step: %1\n%2").arg(desc).arg(m_stepLogs.value(id).trimmed());
         }
     }
+    
+    // Coleta o Log global reconstruindo todos os passos em uma trilha (para repassar a página Final)
+    QString globalLog;
+    for (int i=0; i < m_stepList->count(); i++) {
+        QString cId = m_stepList->item(i)->data(Qt::UserRole).toString();
+        globalLog += QString("=== %1 ===\n%2\n\n").arg(m_stepList->item(i)->data(Qt::UserRole+1).toString()).arg(m_stepLogs[cId]);
+    }
+
     m_wiz->setOpt("install/errorCount",  errorCount);
     m_wiz->setOpt("install/failedSteps", failedSteps.join("\n\n---\n\n"));
-    m_wiz->setOpt("install/fullLog",     m_fullLog->toPlainText());
+    m_wiz->setOpt("install/fullLog",     globalLog);
 
-    if (errorCount == 0)
-        m_statusLabel->setText("Installation complete - no errors.");
-    else
-        m_statusLabel->setText(
-            QString("Installation complete with %1 error(s). See the log for details.").arg(errorCount));
+    if (errorCount == 0) {
+        m_statusLabel->setText(tr("🏁 Construção Concluída — Nenhuma advertência pendente."));
+        m_statusLabel->setStyleSheet("color: #4cd14c; font-weight: bold; font-size: 14px;");
+    } else {
+        m_statusLabel->setText(QString(tr("⚠️ Construção Concluída: Detectados %1 erro(s). Reveja o Log.")).arg(errorCount));
+        m_statusLabel->setStyleSheet("color: #d14c4c; font-weight: bold; font-size: 14px;");
+    }
 
+    // Retorna NextButton e traduz para Finalizar! (O Wizard framework faz os botões em inglês base, vamos transpor localmente).
+    wizard()->button(QWizard::NextButton)->setText(tr("Finalizar >>"));
     wizard()->button(QWizard::NextButton)->setEnabled(true);
+    
     emit completeChanged();
 }
-
 bool InstallPage::isComplete() const { return m_done; }

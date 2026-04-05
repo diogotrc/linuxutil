@@ -1,0 +1,352 @@
+/* ============================================================
+   Rapidora — Global Style Sheet
+   Unified design system: colors, radii, fonts, components
+   ============================================================ */
+
+/* ────────────────────────────────────────────────────────────
+   1. DESIGN TOKENS (as QSS variable-like comments for docs)
+   Primary:     #3584e4  (Fedora Blue)
+   Success:     #36be8c  (Emerald Green)
+   Warning:     #ffa030  (Amber)
+   Error:       #dc3232  (Danger Red)
+   Surface:     #1e1e2e  (Dark Navy)
+   Card:        rgba(255,255,255,0.04)
+   Border:      rgba(255,255,255,0.08)
+   Text/Pri:    #ffffff
+   Text/Sec:    #9aa0b4
+   Radius/Sm:   8px
+   Radius/Md:   12px
+   Radius/Lg:   18px
+   ──────────────────────────────────────────────────────────── */
+
+/* ────────────────────────────────────────────────────────────
+   2. WIZARD CHROME
+   ──────────────────────────────────────────────────────────── */
+QWizard {
+    background-color: #1a1a2e;
+    color: #ffffff;
+    font-family: "Inter", "Noto Sans", "Segoe UI", sans-serif;
+    font-size: 13px;
+}
+
+QWizard QLabel#qt_wizard_titleLabel {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    padding-left: 4px;
+}
+
+QWizard QLabel#qt_wizard_subTitleLabel {
+    font-size: 13px;
+    color: #9aa0b4;
+    padding-left: 4px;
+}
+
+/* Sidebar navigation panel */
+QWizard > QWidget {
+    background: #1a1a2e;
+}
+
+/* ────────────────────────────────────────────────────────────
+   3. GLOBAL WIDGET RESETS
+   ──────────────────────────────────────────────────────────── */
+QWidget {
+    color: #e8eaf0;
+    background-color: transparent;
+    font-family: "Inter", "Noto Sans", "Segoe UI", sans-serif;
+}
+
+QFrame {
+    background-color: transparent;
+}
+
+/* ────────────────────────────────────────────────────────────
+   4. SCROLL AREAS
+   ──────────────────────────────────────────────────────────── */
+QScrollArea {
+    background: transparent;
+    border: none;
+}
+
+QScrollBar:vertical {
+    background: rgba(255,255,255,0.04);
+    width: 8px;
+    border-radius: 4px;
+    margin: 0;
+}
+QScrollBar::handle:vertical {
+    background: rgba(255,255,255,0.20);
+    border-radius: 4px;
+    min-height: 32px;
+}
+QScrollBar::handle:vertical:hover {
+    background: rgba(255,255,255,0.35);
+}
+QScrollBar::add-line:vertical,
+QScrollBar::sub-line:vertical { height: 0; }
+
+QScrollBar:horizontal {
+    background: rgba(255,255,255,0.04);
+    height: 8px;
+    border-radius: 4px;
+}
+QScrollBar::handle:horizontal {
+    background: rgba(255,255,255,0.20);
+    border-radius: 4px;
+    min-width: 32px;
+}
+QScrollBar::handle:horizontal:hover {
+    background: rgba(255,255,255,0.35);
+}
+QScrollBar::add-line:horizontal,
+QScrollBar::sub-line:horizontal { width: 0; }
+
+/* ────────────────────────────────────────────────────────────
+   5. TOOL CARDS (used on every page via addToolCard)
+   ──────────────────────────────────────────────────────────── */
+QFrame[objectName^="ToolCard_"] {
+    background-color: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+}
+QFrame[objectName^="ToolCard_"]:hover {
+    background-color: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ────────────────────────────────────────────────────────────
+   6. CHECKBOXES
+   ──────────────────────────────────────────────────────────── */
+QCheckBox {
+    spacing: 8px;
+    color: #e8eaf0;
+}
+QCheckBox::indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    border: 2px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.05);
+}
+QCheckBox::indicator:hover {
+    border-color: #3584e4;
+    background: rgba(53,132,228,0.10);
+}
+QCheckBox::indicator:checked {
+    background: #3584e4;
+    border-color: #3584e4;
+    image: url(:/icons/check-white.svg);
+}
+QCheckBox::indicator:checked:hover {
+    background: #4a9cf5;
+}
+
+/* ────────────────────────────────────────────────────────────
+   7. PUSH BUTTONS (generic defaults)
+   ──────────────────────────────────────────────────────────── */
+QPushButton {
+    background-color: rgba(255,255,255,0.08);
+    color: #e8eaf0;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 7px 18px;
+    font-weight: 600;
+    font-size: 13px;
+}
+QPushButton:hover {
+    background-color: rgba(255,255,255,0.14);
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.22);
+}
+QPushButton:pressed {
+    background-color: rgba(255,255,255,0.06);
+}
+QPushButton:disabled {
+    color: #555566;
+    border-color: rgba(255,255,255,0.05);
+}
+
+/* Wizard nav buttons (Next / Back / Finish) */
+QWizard QPushButton#qt_wizard_nextBtn,
+QWizard QPushButton#qt_wizard_commitBtn {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0,
+        stop:0 #3584e4, stop:1 #4a9cf5);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 24px;
+    font-weight: 700;
+    font-size: 14px;
+    min-width: 110px;
+}
+QWizard QPushButton#qt_wizard_nextBtn:hover,
+QWizard QPushButton#qt_wizard_commitBtn:hover {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0,
+        stop:0 #4a9cf5, stop:1 #62aaff);
+}
+QWizard QPushButton#qt_wizard_backBtn {
+    background: rgba(255,255,255,0.07);
+    color: #aaaacc;
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+}
+QWizard QPushButton#qt_wizard_backBtn:hover {
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+}
+QWizard QPushButton#qt_wizard_cancelBtn {
+    background: transparent;
+    color: #888899;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 8px;
+    padding: 8px 18px;
+}
+QWizard QPushButton#qt_wizard_cancelBtn:hover {
+    color: #ff9999;
+    border-color: rgba(220,50,50,0.4);
+}
+
+/* ────────────────────────────────────────────────────────────
+   8. LABELS
+   ──────────────────────────────────────────────────────────── */
+QLabel {
+    color: #e8eaf0;
+    background: transparent;
+}
+
+/* Section titles used as dividers */
+QLabel[objectName="SectionTitle"] {
+    font-size: 12px;
+    font-weight: 700;
+    color: #9aa0b4;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 0;
+}
+
+/* ────────────────────────────────────────────────────────────
+   9. PROGRESS BAR
+   ──────────────────────────────────────────────────────────── */
+QProgressBar {
+    background: rgba(255,255,255,0.07);
+    border: none;
+    border-radius: 8px;
+    height: 14px;
+    text-align: center;
+    color: transparent;
+}
+QProgressBar::chunk {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0,
+        stop:0 #3584e4, stop:0.6 #36be8c, stop:1 #4ae4b4);
+    border-radius: 8px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   10. LIST WIDGET (install page step list)
+   ──────────────────────────────────────────────────────────── */
+QListWidget {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    outline: none;
+}
+QListWidget::item {
+    padding: 10px 14px;
+    border-radius: 6px;
+    color: #c8cad8;
+}
+QListWidget::item:selected {
+    background: rgba(53,132,228,0.20);
+    color: #ffffff;
+}
+QListWidget::item:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* ────────────────────────────────────────────────────────────
+   11. PLAIN TEXT EDIT / LOG VIEW
+   ──────────────────────────────────────────────────────────── */
+QPlainTextEdit {
+    background: rgba(10,10,20,0.6);
+    color: #c6d0e0;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    font-family: "JetBrains Mono", "Fira Code", "Hack", "Monospace";
+    font-size: 11px;
+    selection-background-color: rgba(53,132,228,0.4);
+}
+
+/* ────────────────────────────────────────────────────────────
+   12. SPLITTER
+   ──────────────────────────────────────────────────────────── */
+QSplitter::handle {
+    background: rgba(255,255,255,0.06);
+    width: 2px;
+    height: 2px;
+}
+QSplitter::handle:hover {
+    background: #3584e4;
+}
+
+/* ────────────────────────────────────────────────────────────
+   13. COMBO BOXES
+   ──────────────────────────────────────────────────────────── */
+QComboBox {
+    background: rgba(255,255,255,0.07);
+    color: #e8eaf0;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 13px;
+}
+QComboBox:hover {
+    border-color: #3584e4;
+}
+QComboBox::drop-down {
+    border: none;
+    width: 20px;
+}
+QComboBox QAbstractItemView {
+    background: #252535;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: #e8eaf0;
+    selection-background-color: rgba(53,132,228,0.30);
+}
+
+/* ────────────────────────────────────────────────────────────
+   14. INFO BOX (blue info card used on Virt, Comms etc.)
+   ──────────────────────────────────────────────────────────── */
+QFrame[objectName="InfoBox"] {
+    background: rgba(53,132,228,0.10);
+    border: 1px solid rgba(53,132,228,0.30);
+    border-radius: 10px;
+}
+
+/* ────────────────────────────────────────────────────────────
+   15. COLLAPSIBLE SECTION BUTTON (gaming page)
+   ──────────────────────────────────────────────────────────── */
+QPushButton[objectName^="CollapsibleHeader"] {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 10px;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 13px;
+    text-align: left;
+    padding: 10px 16px;
+}
+QPushButton[objectName^="CollapsibleHeader"]:hover {
+    background: rgba(255,255,255,0.10);
+}
+
+/* ────────────────────────────────────────────────────────────
+   16. LANGUAGE DIALOG
+   ──────────────────────────────────────────────────────────── */
+QDialog {
+    background: #1e1e2e;
+    color: #e8eaf0;
+    border-radius: 14px;
+}

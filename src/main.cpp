@@ -1,7 +1,12 @@
 #include <QApplication>
 #include <QFont>
 #include <QMessageBox>
+#include <QFile>
+#include <QDir>
+#include <QStandardPaths>
 #include "mainwizard.h"
+#include "languagedialog.h"
+#include "translator.h"
 #include <unistd.h>
 #include <pwd.h>
 #include <cstdlib>
@@ -50,24 +55,49 @@ int main(int argc, char *argv[])
         qputenv("QT_QPA_PLATFORMTHEME", "kde");
 
     QApplication app(argc, argv);
-    app.setApplicationName("LGL System Loadout");
-    app.setApplicationVersion("1.0.1");
+    app.setApplicationName("Rapidora");
+    app.setApplicationVersion("1.0.6");
     app.setOrganizationName("LinuxGamerLife");
+    app.setWindowIcon(QIcon::fromTheme("rapidora", QIcon("/usr/share/pixmaps/rapidora.png")));
 
     // Increase base font size by 2pt for readability
     QFont appFont = app.font();
     appFont.setPointSize(appFont.pointSize() + 2);
     app.setFont(appFont);
 
+    // Load global QSS stylesheet — search in standard locations
+    {
+        const QStringList candidates = {
+            QDir::currentPath()        + "/src/style.qss",           // dev build
+            QApplication::applicationDirPath() + "/style.qss",       // beside binary
+            "/usr/share/rapidora/style.qss",                          // installed
+        };
+        for (const QString &path : candidates) {
+            QFile f(path);
+            if (f.open(QFile::ReadOnly | QFile::Text)) {
+                app.setStyleSheet(QString::fromUtf8(f.readAll()));
+                break;
+            }
+        }
+    }
+
     if (geteuid() != 0) {
         QMessageBox::warning(
             nullptr,
             "Administrator privileges required",
-            "LGL System Loadout requires administrator privileges to install packages.\n\n"
+            "Rapidora requires administrator privileges to install packages.\n\n"
             "Please launch it from your application menu, or run:\n"
-            "  pkexec lgl-system-loadout"
+            "  pkexec rapidora"
         );
     }
+
+    // Show language selection dialog before the main wizard
+    LanguageDialog langDlg;
+    if (langDlg.exec() != QDialog::Accepted)
+        return 0;
+    
+    RapidoraTranslator *translator = new RapidoraTranslator(langDlg.selectedLang(), &app);
+    app.installTranslator(translator);
 
     MainWizard wizard;
     wizard.show();

@@ -1,23 +1,116 @@
-#include <QGroupBox>
-#include <QCheckBox>
-#include <QPalette>
-#include <QPushButton>
-#include <QApplication>
-#include <QRadioButton>
-#include <QStackedWidget>
 #include "gpupage.h"
 #include "../mainwizard.h"
-#include "../pagehelpers.h"
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
-#include <QFrame>
-#include <QScrollArea>
+#include <QIcon>
+#include <QApplication>
+#include <QProcess>
 
+// =======================================================
+// GpuCard Widget implementation
+// =======================================================
+GpuCard::GpuCard(const QString &id, const QString &title, const QString &desc, const QString &iconName, QWidget *parent)
+    : QFrame(parent), m_id(id), m_checked(false)
+{
+    setFrameStyle(QFrame::StyledPanel);
+    setCursor(Qt::PointingHandCursor);
+    
+    m_vbox = new QVBoxLayout(this);
+    m_vbox->setAlignment(Qt::AlignCenter);
+    
+    auto *iconLabel = new QLabel;
+    QIcon icn = QIcon::fromTheme(iconName);
+    if (icn.isNull()) icn = QIcon::fromTheme("hardware-video-card", QIcon::fromTheme("video-display"));
+    iconLabel->setPixmap(icn.pixmap(64, 64));
+    iconLabel->setAlignment(Qt::AlignCenter);
+    
+    auto *titleLabel = new QLabel(QString("<b>%1</b>").arg(title));
+    titleLabel->setAlignment(Qt::AlignCenter);
+    titleLabel->setStyleSheet("font-size: 17px; color: #ffffff;");
+    
+    auto *descLabel = new QLabel(desc);
+    descLabel->setAlignment(Qt::AlignCenter);
+    descLabel->setWordWrap(true);
+    descLabel->setStyleSheet("color: #b0b0b0; font-size: 13px; line-height: 1.3;");
+    
+    // Check symbol (hide it initially via transparency)
+    m_checkIcon = new QLabel("✔");
+    m_checkIcon->setStyleSheet("color: transparent; font-weight: bold; font-size: 20px;");
+    m_checkIcon->setAlignment(Qt::AlignRight | Qt::AlignTop);
+    
+    auto *topLayout = new QHBoxLayout;
+    topLayout->addStretch();
+    topLayout->addWidget(m_checkIcon);
+    
+    m_vbox->addLayout(topLayout);
+    m_vbox->addWidget(iconLabel);
+    m_vbox->addSpacing(10);
+    m_vbox->addWidget(titleLabel);
+    m_vbox->addSpacing(5);
+    m_vbox->addWidget(descLabel);
+    m_vbox->addStretch();
+    
+    updateStyle();
+}
+
+void GpuCard::setChecked(bool checked) {
+    if (m_checked != checked) {
+        m_checked = checked;
+        updateStyle();
+        if (checked) emit toggled(m_id);
+    }
+}
+
+void GpuCard::addBadge(const QString &text) {
+    auto *badge = new QLabel(text);
+    // Badge Dourado e destancante
+    badge->setStyleSheet("background-color: #f7a000; color: #000000; padding: 4px 10px; border-radius: 8px; font-weight: bold; font-size: 11px;");
+    badge->setAlignment(Qt::AlignCenter);
+    // Inserindo antes do ícone para ficar de Título Superior
+    m_vbox->insertWidget(0, badge, 0, Qt::AlignCenter);
+}
+
+void GpuCard::mouseReleaseEvent(QMouseEvent *event) {
+    if (event->button() == Qt::LeftButton) {
+        emit clicked();
+    }
+    QFrame::mouseReleaseEvent(event);
+}
+
+void GpuCard::updateStyle() {
+    if (m_checked) {
+        setStyleSheet(
+            "GpuCard { "
+            "  background-color: rgba(53, 132, 228, 0.15);"
+            "  border: 2px solid #3584e4;"
+            "  border-radius: 15px;"
+            "}"
+        );
+        m_checkIcon->setStyleSheet("color: #3584e4; font-weight: bold; font-size: 20px;");
+    } else {
+        setStyleSheet(
+            "GpuCard { "
+            "  background-color: rgba(255, 255, 255, 0.05);"
+            "  border: 2px solid rgba(255, 255, 255, 0.05);"
+            "  border-radius: 15px;"
+            "}"
+            "GpuCard:hover { "
+            "  background-color: rgba(255, 255, 255, 0.08);"
+            "  border: 2px solid rgba(255, 255, 255, 0.2);"
+            "}"
+        );
+        m_checkIcon->setStyleSheet("color: transparent; font-weight: bold; font-size: 20px;");
+    }
+}
+
+// =======================================================
+// GpuPage Logic implementation
+// =======================================================
 GpuPage::GpuPage(MainWizard *wizard) : QWizardPage(wizard), m_wiz(wizard)
 {
-    setTitle("GPU Drivers");
-    setSubTitle("Select your GPU manufacturer to see the appropriate driver options.");
+    setTitle(tr("Aceleração Gráfica e GPU"));
+    setSubTitle(tr("Identifique sua placa de vídeo principal. Isso garantirá os drivers corretos e aceleradores no kernel do Linux e RPM Fusion."));
 }
 
 void GpuPage::initializePage()
@@ -26,192 +119,107 @@ void GpuPage::initializePage()
         QLayoutItem *i; while ((i = layout()->takeAt(0))) { if (i->widget()) i->widget()->deleteLater(); delete i; }
         delete layout();
     }
-    m_amdBoxes.clear();
 
     auto *outer = new QVBoxLayout(this);
-    outer->setSpacing(12);
+    outer->setSpacing(20);
+    outer->setContentsMargins(10, 10, 10, 10);
 
-    // GPU choice
-    auto *choiceBox = new QGroupBox("GPU Manufacturer");
-    auto *choiceLayout = new QHBoxLayout(choiceBox);
-    m_radioAmd    = new QRadioButton("AMD");
-    m_radioNvidia = new QRadioButton("NVIDIA");
-    m_radioSkip   = new QRadioButton("Skip / Other");
-    choiceLayout->addWidget(m_radioAmd);
-    choiceLayout->addWidget(m_radioNvidia);
-    choiceLayout->addWidget(m_radioSkip);
-    choiceLayout->addStretch();
-    outer->addWidget(choiceBox);
+    // Dica de UI "Vibecoding" - Feedback Visual Dinâmico
+    m_detectedLabel = new QLabel(tr("🔎 Sondando PCI Local em busca de GPUs..."));
+    m_detectedLabel->setStyleSheet("color: #3584e4; font-weight: bold; font-size: 14px;");
+    m_detectedLabel->setAlignment(Qt::AlignCenter);
+    outer->addWidget(m_detectedLabel);
+    outer->addSpacing(15);
 
-    m_stack = new QStackedWidget;
+    // Layout de Cards (Cards grandes)
+    auto *cardsLayout = new QHBoxLayout;
+    cardsLayout->setSpacing(20);
 
-    // Page 0: blank
-    m_stack->addWidget(new QWidget);
+    // Card AMD
+    m_cardAmd = new GpuCard("amd", 
+                            "Gráficos AMD", 
+                            tr("Suíte Open Source Integrada diretamente e ativamente ao Kernel. Instala extensões RADV, Mesa-DRI e Vulkan em massa."), 
+                            "video-display");
+    
+    // Card NVIDIA
+    m_cardNvidia = new GpuCard("nvidia", 
+                               "Gráficos NVIDIA", 
+                               tr("Driver Proprietário (Código Fechado). Nosso sistema montará o kernel do Akmod-Nvidia utilizando as assinaturas do RPM Fusion NonFree de forma totalmente silenciosa e automática."), 
+                               "video-display-3d");
 
-    // Page 1: AMD
-    {
-        auto *amdWidget = new QWidget;
-        auto *amdOuter  = new QVBoxLayout(amdWidget);
+    // Card Skip / Outro
+    m_cardSkip = new GpuCard("skip", 
+                             tr("Intel / Máquina Virtual"), 
+                             tr("Placas gráficas híbridas, APUs estritas Intel ou Máquinas Virtuais. O Mesa nativo padrão do Fedora será unicamente o suficiente."), 
+                             "dialog-question");
 
-        // Select All / None for AMD
-        auto *toolbarWidget = new QWidget;
-    auto *toolbar = new QHBoxLayout(toolbarWidget);
-    toolbar->setContentsMargins(0,0,0,0);
-    toolbar->addStretch();
-        auto *allBtn = makeToolbarBtn("Select All");
-        auto *noneBtn = makeToolbarBtn("Select None");
-        connect(allBtn,  &QPushButton::clicked, this, &GpuPage::selectAllAmd);
-        connect(noneBtn, &QPushButton::clicked, this, &GpuPage::selectNoneAmd);
-        m_checkingLabel = new QLabel("  Checking...");
-        m_checkingLabel->setStyleSheet("color: palette(highlight); font-style: italic;");
-        m_checkingLabel->setVisible(true);
-        auto *refreshBtn = makeToolbarBtn("Refresh");
-        refreshBtn->setToolTip("Re-check installed status of all items");
-        connect(refreshBtn, &QPushButton::clicked, this, [this] {
-            m_checkingLabel->setVisible(true);
-            QApplication::processEvents();
-            initializePage();
-        });
-        toolbar->addSpacing(8);
-        toolbar->addWidget(refreshBtn);
-        toolbar->addSpacing(4);
-        toolbar->addWidget(m_checkingLabel);
-        toolbar->addWidget(allBtn); toolbar->addWidget(noneBtn);
-        amdOuter->addWidget(toolbarWidget);
+    cardsLayout->addWidget(m_cardAmd);
+    cardsLayout->addWidget(m_cardNvidia);
+    cardsLayout->addWidget(m_cardSkip);
 
-        auto *scroll = new SmoothScrollArea; scroll->setWidgetResizable(true); scroll->setFrameShape(QFrame::NoFrame);
-        auto *inner = new QWidget; auto *amdLayout = new QVBoxLayout(inner); amdLayout->setSpacing(6);
+    outer->addLayout(cardsLayout);
+    outer->addStretch(); // Empurra pra cima de forma elegante
 
-        auto *recBox = new QFrame; recBox->setFrameShape(QFrame::StyledPanel);
-        auto *recLayout = new QVBoxLayout(recBox);
-        auto *recLabel = new QLabel(
-            "<b>Recommendation: install all of these for the best AMD experience.</b><br>"
-            "The full Mesa and Vulkan stack is required for hardware-accelerated rendering, "
-            "Vulkan/DXVK/VKD3D gaming, and GPU-accelerated video decode."
-        );
-        recLabel->setWordWrap(true);
-        recLayout->addWidget(recLabel);
-        amdLayout->addWidget(recBox);
-
-        const QList<std::tuple<QString,QString,QString>> amdItems = {
-            {"mesa_dri",      "mesa-dri-drivers",
-             "Core Mesa DRI drivers - provides OpenGL support for AMD GPUs. Essential."},
-            {"mesa_vulkan",   "mesa-vulkan-drivers",
-             "Mesa Vulkan drivers (RADV) - AMD open-source Vulkan. Required for DXVK and VKD3D-Proton."},
-            {"vulkan_loader", "vulkan-loader",
-             "Vulkan ICD loader - connects applications to the Vulkan driver."},
-            {"mesa_va",       "mesa-va-drivers",
-             "VA-API driver for AMD - GPU-accelerated video decode in VLC, Firefox, mpv, OBS."},
-            {"linux_fw",      "linux-firmware",
-             "Firmware blobs for AMD GPUs. Without this, GPU may run at reduced clocks."},
-        };
-
-        for (const auto &[key, pkg, desc] : amdItems) {
-            bool installed = false;
-            auto *cb = makeItemRow(inner, amdLayout, pkg, installed);
-            amdLayout->addWidget(makeDescLabel(inner, desc));
-            amdLayout->addSpacing(2);
-            m_amdBoxes[key] = cb;
-        }
-
-        amdLayout->addStretch();
-        scroll->setWidget(inner);
-        amdOuter->addWidget(scroll);
-        m_stack->addWidget(amdWidget);
-    }
-
-    // Page 2: NVIDIA
-    {
-        auto *nvWidget = new QWidget;
-        auto *nvLayout = new QVBoxLayout(nvWidget);
-        auto *nvLabel = new QLabel(
-            "<b>NVIDIA GPU</b><br><br>"
-            "This wizard does not automate NVIDIA driver installation as it requires extra care "
-            "to avoid conflicts with the nouveau driver.<br><br>"
-            "<b>Recommended steps after this wizard completes:</b><br>"
-            "1. Ensure RPM Fusion NonFree is enabled (see the Repositories page).<br>"
-            "2. Run: <tt>sudo dnf install akmod-nvidia xorg-x11-drv-nvidia-cuda</tt><br>"
-            "3. Wait for the kernel module to build (do not reboot immediately).<br>"
-            "4. Run: <tt>modinfo -F version nvidia</tt> to confirm the module is built.<br>"
-            "5. Reboot.<br><br>"
-            "See <a href='https://rpmfusion.org/Howto/NVIDIA'>https://rpmfusion.org/Howto/NVIDIA</a> for full instructions."
-        );
-        nvLabel->setWordWrap(true);
-        nvLabel->setOpenExternalLinks(true);
-        nvLayout->addWidget(nvLabel);
-        nvLayout->addStretch();
-        m_stack->addWidget(nvWidget);
-    }
-
-    // Page 3: Skip
-    {
-        auto *skipWidget = new QWidget;
-        auto *skipLayout = new QVBoxLayout(skipWidget);
-        auto *skipLabel = new QLabel("No GPU drivers will be installed.\n\nYou can install drivers manually at any time.");
-        skipLabel->setWordWrap(true);
-        skipLayout->addWidget(skipLabel);
-        skipLayout->addStretch();
-        m_stack->addWidget(skipWidget);
-    }
-
-    outer->addWidget(m_stack);
-
-    connect(m_radioAmd,    &QRadioButton::toggled, this, &GpuPage::onGpuChoice);
-    connect(m_radioNvidia, &QRadioButton::toggled, this, &GpuPage::onGpuChoice);
-    connect(m_radioSkip,   &QRadioButton::toggled, this, &GpuPage::onGpuChoice);
-
-    // Run AMD install checks concurrently - must use actual package names, not map keys
-    const QMap<QString,QString> amdPkgNames = {
-        {"mesa_dri",      "mesa-dri-drivers"},
-        {"mesa_vulkan",   "mesa-vulkan-drivers"},
-        {"vulkan_loader", "vulkan-loader"},
-        {"mesa_va",       "mesa-va-drivers"},
-        {"linux_fw",      "linux-firmware"},
+    // Lógica de Mutex (Somente 1 Selecionado por vez)
+    auto handleSelection = [this](QString clickedId) {
+        selectCard(clickedId);
     };
-    QList<QPair<QString, std::function<bool()>>> _checks;
-    for (auto it = m_amdBoxes.constBegin(); it != m_amdBoxes.constEnd(); ++it) {
-        QString key = it.key();
-        QString pkg = amdPkgNames.value(key, key);
-        _checks.append({key, [pkg]{ return isDnfInstalled(pkg); }});
-    }
-    runChecksAsync(this, _checks, [this](QMap<QString,bool> results) {
-        for (auto it = results.constBegin(); it != results.constEnd(); ++it) {
-            if (!m_amdBoxes.contains(it.key())) continue;
-            auto *row = m_amdBoxes[it.key()]->parentWidget();
-            if (!row) continue;
-            auto *lbl = row->findChild<QLabel*>("badge");
-            if (!lbl) continue;
-            lbl->setText(it.value() ? "[Installed]" : "[Not Installed]");
-            lbl->setStyleSheet(it.value()
-                ? "color: #3db03d; font-weight: bold; font-size: 8pt;"
-                : "color: #cc7700; font-weight: bold; font-size: 8pt;");
-        }
-        if (m_checkingLabel) m_checkingLabel->setVisible(false);
-    });
+
+    connect(m_cardAmd, &GpuCard::clicked, this, [=]() { handleSelection("amd"); });
+    connect(m_cardNvidia, &GpuCard::clicked, this, [=]() { handleSelection("nvidia"); });
+    connect(m_cardSkip, &GpuCard::clicked, this, [=]() { handleSelection("skip"); });
+
+    // Dispara a Mágica "Vibecoding" 
+    autoDetectGPU();
 }
 
-void GpuPage::onGpuChoice()
+void GpuPage::selectCard(const QString &id) {
+    m_cardAmd->setChecked(id == "amd");
+    m_cardNvidia->setChecked(id == "nvidia");
+    m_cardSkip->setChecked(id == "skip");
+}
+
+void GpuPage::autoDetectGPU()
 {
-    if      (m_radioAmd->isChecked())    m_stack->setCurrentIndex(1);
-    else if (m_radioNvidia->isChecked()) m_stack->setCurrentIndex(2);
-    else if (m_radioSkip->isChecked())   m_stack->setCurrentIndex(3);
-    else                                 m_stack->setCurrentIndex(0);
-}
+    QProcess p;
+    // O lspci roda cruamente rapidíssimo
+    p.start("lspci", QStringList{});
+    p.waitForFinished(3000);
+    QString out = QString::fromUtf8(p.readAllStandardOutput()).toLower();
+    
+    QString autoChoice = "skip";
+    QString foundGPUName = tr("Nenhuma GPU dedicada detectada (Fallback / Intel).");
 
-void GpuPage::selectAllAmd()  { for (auto *cb : m_amdBoxes) cb->setChecked(true); }
-void GpuPage::selectNoneAmd() { for (auto *cb : m_amdBoxes) cb->setChecked(false); }
+    // Procura por VGA ou 3D controller no log 
+    if (out.contains("nvidia")) {
+        autoChoice = "nvidia";
+        m_cardNvidia->addBadge(tr("★ RECOMENDADO MÁQUINA"));
+        foundGPUName = tr("Acelerador Gráfico NVIDIA detectado na barramento físico!");
+    } else if (out.contains("amd") || out.contains("radeon")) {
+        autoChoice = "amd";
+        m_cardAmd->addBadge(tr("★ RECOMENDADO MÁQUINA"));
+        foundGPUName = tr("Placa de Vídeo / APU AMD detectada na barramento físico!");
+    } else if (out.contains("intel")) {
+        m_cardSkip->addBadge(tr("★ RECOMENDADO MÁQUINA"));
+        foundGPUName = tr("Gráficos Intel Arc/Integrado detectados.");
+    }
+
+    m_detectedLabel->setText(QString("🔎 <b>Concluído:</b> %1").arg(foundGPUName));
+    m_detectedLabel->setStyleSheet("color: #4cd14c; font-weight: normal; font-size: 13px;");
+
+    // Seleciona a carta dinamicamente
+    selectCard(autoChoice);
+}
 
 bool GpuPage::validatePage()
 {
     QString choice = "none";
-    if      (m_radioAmd->isChecked())    choice = "amd";
-    else if (m_radioNvidia->isChecked()) choice = "nvidia";
-    else if (m_radioSkip->isChecked())   choice = "skip";
+    if (m_cardAmd->isChecked())         choice = "amd";
+    else if (m_cardNvidia->isChecked()) choice = "nvidia";
+    else if (m_cardSkip->isChecked())   choice = "skip";
+    
+    // Conforme refatorado no arquivo mainwizard.cpp, a engine cuida dos installSteps via esta flag universal invisível!
     m_wiz->setOpt("gpu/choice", choice);
-
-    if (choice == "amd") {
-        for (auto it = m_amdBoxes.constBegin(); it != m_amdBoxes.constEnd(); ++it)
-            m_wiz->setOpt(QString("gpu/amd/%1").arg(it.key()), it.value()->isChecked());
-    }
+    
     return true;
 }
